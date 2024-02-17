@@ -1,6 +1,7 @@
 import axios from "axios"
 
-export const API_BASE_URL = "http://localhost:8080"
+// export const API_BASE_URL = "http://localhost:8080"
+export const API_BASE_URL = "https://project-lol-service-production.up.railway.app"
 
 const jwt = localStorage.getItem("jwt")
 
