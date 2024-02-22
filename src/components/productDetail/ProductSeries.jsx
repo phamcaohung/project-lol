@@ -40,7 +40,7 @@ const ProductSeries = ({ product }) => {
                 />
             </div>
 
-            {product.imageTier != null && 
+            {product.imageTier !== "" && 
                 <div className="flex justify-center">
                     <img
                         style={{

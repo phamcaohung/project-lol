@@ -20,7 +20,7 @@ const SectionCard = ({ product }) => {
                 />
             </div>
 
-            {product.imageTier != null && 
+            {product.imageTier !== "" && 
                 <div className="flex justify-center">
                     <img
                         style={{
@@ -42,7 +42,7 @@ const SectionCard = ({ product }) => {
                 </div>
                 <div className="flex items-center justify-center">
                     <h1 className='font-bold text-lg lg:text-xl text-gray-100'>
-                        {product?.price} 
+                        {product.price} 
                     </h1>
                     <img 
                         className='w-[1rem] h-[1rem] ml-2 mt-0.5'
@@ -51,7 +51,7 @@ const SectionCard = ({ product }) => {
                     />
                 </div>
                 <h1 className="font-bold text-lg text-gray-100 flex justify-center mt-3">
-                    {moment(product?.releaseDate).format("MMMM DD, YYYY")}
+                    {moment(product.releaseDate).format("MMMM DD, YYYY")}
                 </h1>
             </div>
         </div>

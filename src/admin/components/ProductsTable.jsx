@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Table, TableContainer, Pagination, TextField, TableHead, TableRow, TableCell, TableBody, Paper, Button, Card, CardHeader, } from "@mui/material"
+import { Table, Skeleton, Autocomplete, TableContainer, Pagination, TextField, TableHead, TableRow, TableCell, TableBody, Paper, Button, Card, CardHeader, } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
-import { deleteProduct, findProducts } from '../../state/product/Action'
+import { deleteProduct, findProducts, getAllSeriesName } from '../../state/product/Action'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useLocation, useNavigate } from "react-router-dom";
 
-const columns = [
-    { field: 'image', headerName: 'Image', width: 70 },
-    { field: 'firstName', headerName: 'Title', width: 130 },
-    { field: 'lastName', headerName: 'Series', width: 130 },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 90,
-    },
-]
+
 
 const ProductsTable = () => {
     const [name, setName] = useState("")
+    const [seriesName, setSeriesName] = useState("")
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const location = useLocation()
-    const { products } = useSelector(store => store.products)
+    const { products, loading } = useSelector(store => store.products)
+    const { deletedProduct } = useSelector(store => store.deletedProduct)
+    const { series } = useSelector(store => store.series)
     const decodedQueryString = decodeURIComponent(location.search)
     const searchParams = new URLSearchParams(decodedQueryString)
     const pageNumber = searchParams.get('page') || 1
@@ -38,12 +31,20 @@ const ProductsTable = () => {
         dispatch(deleteProduct(productId))
     }
 
-    const handlePaginationChange = (event,value) => {
+    const handlePaginationChange = (event, value) => {
         const searchParams = new URLSearchParams(location.search)
         searchParams.set("page", value)
         const query = searchParams.toString()
-        navigate({search: `?${query}`})
+        navigate({ search: `?${query}` })
     }
+
+    const handleChangeSeriesName = (e, value) => {
+        setSeriesName(value || "")
+    }
+
+    useEffect(() => {
+        dispatch(getAllSeriesName())
+    }, [dispatch])
 
     useEffect(() => {
         const data = {
@@ -54,26 +55,40 @@ const ProductsTable = () => {
             minDiscount: 0,
             sort: "price_low",
             pageNumber: pageNumber - 1,
-            pageSize: 5,
+            pageSize: 10,
             stock: "",
             name: name,
+            series: seriesName
         }
-        console.log("data: ", data);
-    
         dispatch(findProducts(data))
-    }, [products.deletedProduct, name, pageNumber])
 
+    }, [deletedProduct, name, pageNumber, seriesName, dispatch])
     return (
         <div className="p-5">
             <Card className="mt-2 bg-[#1b1b1b]">
-                <CardHeader className="text-center" title="All Products"/>
-                <div className="ml-56">
-                    <TextField 
-                        id="standard-basic" 
-                        label="Title" 
-                        variant="standard" 
+                <CardHeader className="text-center" title="All Products" />
+                <div className="ml-56 flex items-center">
+                    <TextField
+                        id="standard-basic"
+                        label="Title"
+                        variant="outlined"
                         onChange={handleChangeName}
                         value={name}
+                        sx={{
+                            width: '18rem'
+                        }}
+                    />
+
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        options={series}
+                        renderInput={(params) => <TextField {...params} label="Name Series" />}
+                        onChange={handleChangeSeriesName}
+                        sx={{
+                            width: '19rem',
+                            marginLeft: '1rem'
+                        }}
                     />
                 </div>
                 <TableContainer component={Paper}>
@@ -90,60 +105,91 @@ const ProductsTable = () => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                        {products?.content?.map((items) => (
-                            <TableRow
-                                key={items.id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                className="gap-0"
-                            >
-                                <TableCell align="left">
-                                    <img 
-                                        src={items.color.find((item) => item.name === "Default").image}
-                                        className="max-w-[100px] h-auto"
-                                    />
-                                </TableCell>
-                                <TableCell align="left" scope="row">
-                                    {items.title}
-                                </TableCell>
-                                <TableCell align="left">{items.series}</TableCell>
-                                <TableCell align="left">{items.discountedPrice}</TableCell>
-                                <TableCell align="left">{items.quantity}</TableCell>
-                                <TableCell align="left">
-                                    <Button 
-                                        variant="contained"
-                                        onClick={() => navigate(`/admin/product/edit/${items.id}`)} 
-                                        color="secondary"
-                                        startIcon={<EditIcon/>}
-                                    >
-                                        Edit
-                                    </Button>
-                                </TableCell>
-                                <TableCell align="left">
-                                    <Button 
-                                        variant="contained"
-                                        onClick={() => handleDeleteProduct(items.id)}
-                                        color="error"
-                                        startIcon={<DeleteIcon/>}
-                                    >
-                                        Delete
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                            {products?.content?.map((items) => (
+                                <TableRow
+                                    key={items.id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    className="gap-0"
+                                >
+                                    <TableCell align="left">
+                                        {!loading ? (
+                                            <img
+                                                src={items.color.find((item) => item.name === "Default").image}
+                                                className="max-w-[100px] h-auto"
+                                                alt=""
+                                            />
+                                        ) : (
+                                            <Skeleton variant="rectangular" height={80} />
+                                        )}
+                                    </TableCell>
+                                    <TableCell align="left" scope="row">
+                                        {!loading
+                                            ? items.title
+                                            : <Skeleton variant="text" height={40} />
+                                        }
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {!loading
+                                            ? items.series
+                                            : <Skeleton variant="text" height={40} />
+                                        }
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {!loading
+                                            ? items.discountedPrice
+                                            : <Skeleton variant="text" height={40} />
+                                        }
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {!loading
+                                            ? items.quantity
+                                            : <Skeleton variant="text" height={40} />
+                                        }
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {!loading
+                                            ? <Button
+                                                variant="contained"
+                                                onClick={() => navigate(`/admin/product/edit/${items.id}`)}
+                                                color="secondary"
+                                                startIcon={<EditIcon />}
+                                            >
+                                                Edit
+                                            </Button>
+
+                                            : <Skeleton variant="text" height={60} />
+                                        }
+                                    </TableCell>
+                                    <TableCell align="left">
+                                        {!loading
+                                            ? <Button
+                                                variant="contained"
+                                                onClick={() => handleDeleteProduct(items.id)}
+                                                color="error"
+                                                startIcon={<DeleteIcon />}
+                                            >
+                                                Delete
+                                            </Button>
+
+                                            : <Skeleton variant="text" height={60} />
+                                        }
+                                    </TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
 
                     <div className='px-4 py-4 flex justify-center'>
-                        <Pagination 
-                          count={products?.totalPages} 
-                          color='secondary'
-                          onChange={handlePaginationChange}
+                        <Pagination
+                            count={products?.totalPages}
+                            color='secondary'
+                            onChange={handlePaginationChange}
                         />
                     </div>
                 </TableContainer>
             </Card>
         </div>
-        
+
     )
 }
 
