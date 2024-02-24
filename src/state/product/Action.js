@@ -1,5 +1,5 @@
 import { api } from "../../config/apiConfig"
-import { CREATE_PRODUCT_FAILURE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS, UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_REQUEST, UPDATE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_SERIES_REQUEST, FIND_PRODUCT_BY_SERIES_SUCCESS, FIND_PRODUCT_BY_SERIES_FAILURE, FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST, FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, GET_ALL_SERIES_REQUEST, GET_ALL_SERIES_SUCCESS, GET_ALL_SERIES_FAILURE, CAROUSEL_SKIN_PROJECT_REQUEST, CAROUSEL_SKIN_PROJECT_SUCCESS, CAROUSEL_SKIN_PROJECT_FAILURE, CAROUSEL_SKIN_COVEN_REQUEST, CAROUSEL_SKIN_COVEN_SUCCESS, CAROUSEL_SKIN_COVEN_FAILURE, CAROUSEL_SKIN_IMMORTAL_REQUEST, CAROUSEL_SKIN_IMMORTAL_SUCCESS, CAROUSEL_SKIN_IMMORTAL_FAILURE } from "./ActionType"
+import { CREATE_PRODUCT_FAILURE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS, UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_REQUEST, UPDATE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_SERIES_REQUEST, FIND_PRODUCT_BY_SERIES_SUCCESS, FIND_PRODUCT_BY_SERIES_FAILURE, FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST, FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, GET_ALL_SERIES_REQUEST, GET_ALL_SERIES_SUCCESS, GET_ALL_SERIES_FAILURE } from "./ActionType"
 
 export const findProducts = (reqData) => async (dispatch) => {
     dispatch({ type: FIND_PRODUCT_REQUEST })
@@ -107,55 +107,23 @@ export const findProductsBySeries = (reqData) => async (dispatch) => {
     }
 }
 
-export const findCarouselProductsBySeries = (reqData) => async (dispatch) => {
+export const findCarouselProductsBySeries = (sectionName) => async (dispatch) => {
     dispatch({ type: FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST })
 
     try {
-        const { data } = await api.get(`/api/products/carousel?series=${reqData}`)
+        const { data } = await api.get(`/api/products/carousel?series=${sectionName}`)
 
-        dispatch({ type: FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, payload: data })
+        dispatch({
+            type: FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS,
+            payload: {
+                sectionName,
+                data,
+            }
+        })
     } catch (error) {
         dispatch({ type: FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, payload: error.message })
     }
 }
-
-export const findCarouselSkinProject = (reqData) => async (dispatch) => {
-    dispatch({ type: CAROUSEL_SKIN_PROJECT_REQUEST })
-
-    try {
-        const { data } = await api.get(`/api/products/carousel?series=${reqData}`)
-
-        dispatch({ type: CAROUSEL_SKIN_PROJECT_SUCCESS, payload: data })
-    } catch (error) {
-        dispatch({ type: CAROUSEL_SKIN_PROJECT_FAILURE, payload: error.message })
-    }
-}
-
-
-export const findCarouselSkinCoven = (reqData) => async (dispatch) => {
-    dispatch({ type: CAROUSEL_SKIN_COVEN_REQUEST })
-
-    try {
-        const { data } = await api.get(`/api/products/carousel?series=${reqData}`)
-
-        dispatch({ type: CAROUSEL_SKIN_COVEN_SUCCESS, payload: data })
-    } catch (error) {
-        dispatch({ type: CAROUSEL_SKIN_COVEN_FAILURE, payload: error.message })
-    }
-}
-
-export const findCarouselSkinImmortal = (reqData) => async (dispatch) => {
-    dispatch({ type: CAROUSEL_SKIN_IMMORTAL_REQUEST })
-
-    try {
-        const { data } = await api.get(`/api/products/carousel?series=${reqData}`)
-
-        dispatch({ type: CAROUSEL_SKIN_IMMORTAL_SUCCESS, payload: data })
-    } catch (error) {
-        dispatch({ type: CAROUSEL_SKIN_IMMORTAL_FAILURE, payload: error.message })
-    }
-}
-
 
 
 export const getAllSeriesName = () => async (dispatch) => {

@@ -14,24 +14,24 @@ const CustomerRouter = () => {
     return (
         <div>
             <div>
-                <Navigation/>
+                <Navigation />
             </div>
-                <Routes>
-                    <Route path="/login" element={<HomePage/>}></Route>
-                    <Route path="/register" element={<HomePage/>}></Route>
-                    <Route path="/" element={<HomePage/>}></Route>
-                    <Route path="/cart" element={<Cart/>}></Route>
-                    <Route path="/category/:category" element={<Product/>}></Route>
-                    <Route path="/product/:productId" element={<ProductDetail/>}></Route>
-                    <Route path="/checkout" element={<Checkout/>}></Route>
-                    <Route path="/account/order" element={<Order/>}></Route>
-                    <Route path="/payment/:orderId" element={<PaymentSuccess/>}></Route>
-                </Routes>
-            <div>
-                <Footer/>
+            <Routes>
+                <Route path="/login" element={<HomePage />}></Route>
+                <Route path="/register" element={<HomePage />}></Route>
+                <Route path="/" element={<HomePage />}></Route>
+                <Route path="/cart" element={<Cart />}></Route>
+                <Route path="/category/:category" element={<Product />}></Route>
+                <Route path="/product/:productId" element={<ProductDetail />}></Route>
+                <Route path="/checkout" element={<Checkout />}></Route>
+                <Route path="/account/order" element={<Order />}></Route>
+                <Route path="/payment/:orderId" element={<PaymentSuccess />}></Route>
+            </Routes>
+            <div className="-mt-10">
+                <Footer />
             </div>
         </div>
-        
+
     )
 }
 

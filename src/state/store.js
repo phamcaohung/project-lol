@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
 import thunk from "redux-thunk";
 import { authReducer } from "./auth/Reducer";
-import { carouselProductSeriesReducer, carouselSkinCovenReducer, carouselSkinImmortalReducer, carouselSkinProjectReducer, deleteProductReducer, getAllSeriesNameReducer, productListReducer, productReducer, productSeriesReducer } from "./product/Reducer";
+import { carouselProductSeriesReducer, deleteProductReducer, getAllSeriesNameReducer, productListReducer, productReducer, productSeriesReducer } from "./product/Reducer";
 import { getCartReducer, deleteCartReducer } from "./cart/Reducer";
 import { createOrderReducer, deleteAddressReducer, getAddressReducer, getOrderHistoryReducer, orderReducer } from "./order/Reducer";
 import { OrderStatusDeleteReducer, adminOrderReducer, changeOrderStatusReducer } from "./admin/order/Reducer";
@@ -25,9 +25,6 @@ const rootReducers = combineReducers({
     status: changeOrderStatusReducer,
     productSeries: productSeriesReducer,
     productCarousel: carouselProductSeriesReducer,
-    skinProject: carouselSkinProjectReducer,
-    skinCoven: carouselSkinCovenReducer,
-    skinImmortal: carouselSkinImmortalReducer,
     address: getAddressReducer,
     deletedAddress: deleteAddressReducer,
     series: getAllSeriesNameReducer
