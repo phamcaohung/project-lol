@@ -3,20 +3,17 @@ import { Disclosure } from '@headlessui/react'
 import { MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
 import ProductCard from './ProductCard'
 import { filters, singleFilter, sortOptions } from './FilterData'
-import { FormControl, FormControlLabel, RadioGroup, Radio, FormLabel, Pagination, TextField, Grid, Autocomplete } from "@mui/material"
+import { FormControlLabel, FormLabel, Pagination, TextField, Grid, Autocomplete, FormGroup, Checkbox, FormControl } from "@mui/material"
 import FilterListIcon from '@mui/icons-material/FilterList';
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { findProducts, getAllSeriesName } from '../../state/product/Action'
 
 
-// function classNames(...classes) {
-//   return classes.filter(Boolean).join(' ')
-// }
 
 export default function Product() {
+  const [checked, setChecked] = useState(false)
   const [name, setName] = useState("")
-  const [seriesName, setSeriesName] = useState("")
   const location = useLocation()
   const navigate = useNavigate()
   const param = useParams()
@@ -27,6 +24,7 @@ export default function Product() {
 
   const decodedQueryString = decodeURIComponent(location.search)
   const searchParams = new URLSearchParams(decodedQueryString)
+  const seriesValue = searchParams.get('series')
   const tierValue = searchParams.get('tier')
   const priceValue = searchParams.get('price')
   const disccount = searchParams.get('disccount')
@@ -59,9 +57,12 @@ export default function Product() {
     navigate({ search: `?${query}` })
   }
 
-  const handleRadioFilterChange = (e, sectionId) => {
+  const handleCheckBoxFilterChange = (e, sectionId) => {
+    setChecked(!checked)
     const searchParams = new URLSearchParams(location.search)
-    searchParams.set(sectionId, e.target.value)
+    searchParams.set(sectionId, checked ? "" : e.target.value)
+    if (searchParams.get("sort") === "")
+      searchParams.delete("sort")
     const query = searchParams.toString()
     navigate({ search: `${query}` })
   }
@@ -79,7 +80,12 @@ export default function Product() {
   }
 
   const handleChangeSeriesName = (e, value) => {
-    setSeriesName(value || "")
+    const searchParams = new URLSearchParams(location.search)
+    searchParams.set("series", value || "")
+    if (searchParams.get("series") === "")
+      searchParams.delete("series")
+    const query = searchParams.toString()
+    navigate({ search: `?${query}` })
   }
 
   useEffect(() => {
@@ -87,28 +93,29 @@ export default function Product() {
   }, [dispatch])
 
   useEffect(() => {
+    console.log("seriesValue: ", seriesValue);
     const [minPrice, maxPrice] = priceValue === null ? [0, 100000] : priceValue.split("-").map(Number)
 
     const data = {
-        category: param.category,
-        tier: tierValue || [],
-        minPrice,
-        maxPrice,
-        minDiscount: disccount || 0,
-        sort: sortValue || "price_low",
-        pageNumber: pageNumber - 1,
-        pageSize: 8,
-        stock: stock,
-        name: name,
-        series: seriesName
+      category: param.category,
+      tier: tierValue || [],
+      minPrice,
+      maxPrice,
+      minDiscount: disccount || 0,
+      sort: sortValue || "",
+      pageNumber: pageNumber - 1,
+      pageSize: 8,
+      stock: stock,
+      name: name,
+      series: seriesValue || ""
     }
 
     dispatch(findProducts(data))
-    
-  }, [param.category, tierValue, priceValue, disccount, sortValue, pageNumber, stock, name, seriesName, dispatch])
+
+  }, [param.category, tierValue, priceValue, disccount, sortValue, pageNumber, stock, name, seriesValue, dispatch])
 
   return (
-    <div className="bg-white">
+    <div className="bg-white mt-10">
       <div>
         <main className="mx-auto px-4 sm:px-6 lg:px-20">
           <Grid container spacing={5} className="flex border-b border-gray-200 pb-6 pt-24">
@@ -140,21 +147,17 @@ export default function Product() {
               </Grid>
 
               <Grid item xs={6} className='flex justify-end'>
-                <RadioGroup
-                  row
-                  defaultValue="female"
-                  name="radio-buttons-group"
-                >
+                <FormGroup row>
                   {sortOptions.map((option, optionIdx) => (
                     <FormControlLabel
                       key={optionIdx}
-                      onChange={(e) => handleRadioFilterChange(e, option.id)}
-                      value={option.value}
-                      control={<Radio />}
+                      control={<Checkbox />}
                       label={option.name}
+                      value={option.value}
+                      onChange={(e) => handleCheckBoxFilterChange(e, option.id)}
                     />
                   ))}
-                </RadioGroup>
+                </FormGroup>
               </Grid>
             </Grid>
           </Grid>
@@ -194,7 +197,6 @@ export default function Product() {
                                     name={`${section.id}[]`}
                                     defaultValue={option.value}
                                     type="checkbox"
-                                    defaultChecked={option.checked}
                                     className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                   />
 
@@ -238,7 +240,7 @@ export default function Product() {
                           <Disclosure.Panel className="pt-6">
                             <div className="space-y-4">
                               <FormControl>
-                                <RadioGroup
+                                <FormGroup
                                   aria-labelledby="demo-radio-buttons-group-label"
                                   defaultValue="female"
                                   name="radio-buttons-group"
@@ -247,14 +249,14 @@ export default function Product() {
                                     <div className='flex justify-between'>
                                       <FormControlLabel
                                         key={optionIdx}
-                                        onChange={(e) => handleRadioFilterChange(e, section.id)}
+                                        control={<Checkbox />}
+                                        label={option.name}
                                         value={option.value}
-                                        control={<Radio />}
-                                        label={option.label}
+                                        onChange={(e) => handleCheckBoxFilterChange(e, option.id)}
                                       />
                                     </div>
                                   ))}
-                                </RadioGroup>
+                                </FormGroup>
                               </FormControl>
                             </div>
                           </Disclosure.Panel>

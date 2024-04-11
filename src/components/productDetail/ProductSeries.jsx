@@ -29,7 +29,7 @@ const ProductSeries = ({ product }) => {
                 <img
                     
                     className={isHovered 
-                        ?   'h-[14.7rem] w-full object-cover object-center'
+                        ?   'h-[13.5rem] w-full object-cover object-center'
                         :   'h-full w-full'
                     }
                     alt=""
@@ -40,7 +40,7 @@ const ProductSeries = ({ product }) => {
                 />
             </div>
 
-            {product.imageTier !== "" && 
+            {product.imageTier !== "" || !product.imageTier && 
                 <div className="flex justify-center">
                     <img
                         style={{

@@ -11,6 +11,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import ReactPlayer from 'react-player'
 import BrushIcon from '@mui/icons-material/Brush';
 import ProductSeries from './ProductSeries'
+import ProductSkill from './ProductSkill';
 
 
 
@@ -30,6 +31,7 @@ export default function ProductDetail() {
         image: "",
     })
     const [showYoutube, setShowYoutube] = useState(false)
+    const checkCategory = 'product?.category.name' 
 
     const navigate = useNavigate()
     const param = useParams()
@@ -66,7 +68,7 @@ export default function ProductDetail() {
         const data = { productId: param.productId }
         console.log("productId", data);
         dispatch(findProductsById(data))
-    }, [param.productId])
+    }, [param.productId, dispatch])
 
 
     useEffect(() => {
@@ -75,7 +77,7 @@ export default function ProductDetail() {
             series: series
         }
         dispatch(findProductsBySeries(data))
-    }, [param.productId, series])
+    }, [param.productId, series, dispatch])
 
     const handleColor = (e) => {
         setSelectedColor(e)
@@ -97,7 +99,7 @@ export default function ProductDetail() {
                 className='cursor-pointer'
                 src={size.image}
                 alt="" />
-            <p className={`text-gray-300 justify-center flex ${size.name == "Default" && 'mt-9'}`}>
+            <p className={`text-gray-300 justify-center flex ${size.name === "Default" && 'mt-9'}`}>
                 {size.name}
             </p>
         </>
@@ -262,25 +264,42 @@ export default function ProductDetail() {
                             </>
                         )}
 
-                        <Grid container spacing={2} className='pt-5'>
-                            <Grid item xs={4}>
-                                <h1 className='text-lg lg:text-xl text-gray-300'>
-                                    Tier :
-                                </h1>
+                        {checkCategory === "skin" ? (
+                            <Grid container spacing={2} className='pt-5'>
+                                <Grid item xs={4}>
+                                    <h1 className='text-lg lg:text-xl text-gray-300'>
+                                        Tier :
+                                    </h1>
+                                </Grid>
+                                <Grid item xs={8} className='flex items-center'>
+                                    {product?.imageTier !== "" &&
+                                        <img
+                                            className='w-[1.5rem] h-[1.5rem]'
+                                            src={product?.imageTier}
+                                            alt=""
+                                        />
+                                    }
+                                    <h1 className={`font-bold text-lg lg:text-xl text-gray-100 ${product?.imageTier !== "" && 'ml-5'}`}>
+                                        {product?.tier}
+                                    </h1>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={8} className='flex items-center'>
-                                {product?.imageTier !== "" &&
-                                    <img
-                                        className='w-[1.5rem] h-[1.5rem]'
-                                        src={product?.imageTier}
-                                        alt=""
-                                    />
-                                }
-                                <h1 className={`font-bold text-lg lg:text-xl text-gray-100 ${product?.imageTier !== "" && 'ml-5'}`}>
-                                    {product?.tier}
-                                </h1>
+                        ) : (
+                            <Grid container spacing={2} className='pt-5'>
+                                <Grid item xs={4}>
+                                    <h1 className='text-lg lg:text-xl text-gray-300'>
+                                        Role :
+                                    </h1>
+                                </Grid>
+                                <Grid item xs={8} className='flex items-center'>
+                                    <h1 className={`font-bold text-lg lg:text-xl text-gray-100`}>
+                                        {product?.champion.role}
+                                    </h1>
+                                </Grid>
                             </Grid>
-                        </Grid>
+                        )}
+
+
 
                         <Grid container spacing={2} className='pt-5'>
                             <Grid item xs={4}>
@@ -334,6 +353,20 @@ export default function ProductDetail() {
                             </Grid>
                         </Grid>
 
+                        <Grid container spacing={2} className='pt-5'>
+                            <Grid item xs={4}>
+                                <h1 className='text-lg lg:text-xl text-gray-300'>
+                                    Category :
+                                </h1>
+                            </Grid>
+                            <Grid item xs={8} className='flex items-center'>
+                                <h1 className='font-bold text-lg lg:text-xl text-gray-100'>
+                                    {product?.category.name.toUpperCase()}
+                                </h1>
+                            </Grid>
+                        </Grid>
+                                               
+                        {product?.category.name === "champion" && <ProductSkill skill={product?.champion.skill}/>}
 
                         {/* Information */}
                         <div className="mt-4 lg:row-span-3 lg:mt-0">

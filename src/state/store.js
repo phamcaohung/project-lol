@@ -1,7 +1,7 @@
 import { applyMiddleware, combineReducers, legacy_createStore } from "redux";
 import thunk from "redux-thunk";
 import { authReducer } from "./auth/Reducer";
-import { carouselProductSeriesReducer, deleteProductReducer, getAllSeriesNameReducer, productListReducer, productReducer, productSeriesReducer } from "./product/Reducer";
+import { carouselProductSeriesReducer, deleteProductReducer, getAllSeriesNameReducer, getNewProductReducer, productListReducer, productReducer, productSeriesReducer } from "./product/Reducer";
 import { getCartReducer, deleteCartReducer } from "./cart/Reducer";
 import { createOrderReducer, deleteAddressReducer, getAddressReducer, getOrderHistoryReducer, orderReducer } from "./order/Reducer";
 import { OrderStatusDeleteReducer, adminOrderReducer, changeOrderStatusReducer } from "./admin/order/Reducer";
@@ -27,7 +27,8 @@ const rootReducers = combineReducers({
     productCarousel: carouselProductSeriesReducer,
     address: getAddressReducer,
     deletedAddress: deleteAddressReducer,
-    series: getAllSeriesNameReducer
+    series: getAllSeriesNameReducer,
+    newProducts: getNewProductReducer,
 })
 
 export const store = legacy_createStore(rootReducers, applyMiddleware(thunk))

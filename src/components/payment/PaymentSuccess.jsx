@@ -45,7 +45,7 @@ const PaymentSuccess = () => {
             if(order?.paymentDetails.status === "PENDING")
                 dispatch(updatePayment(data))   
         }
-    }, [orderId, paymentId])
+    }, [orderId, paymentId, dispatch])
     
 
     return (

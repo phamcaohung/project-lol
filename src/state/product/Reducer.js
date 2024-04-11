@@ -1,4 +1,4 @@
-import { DELETE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS, FIND_PRODUCT_BY_SERIES_REQUEST, FIND_PRODUCT_BY_SERIES_SUCCESS, FIND_PRODUCT_BY_SERIES_FAILURE, FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST, FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, GET_ALL_SERIES_REQUEST, GET_ALL_SERIES_SUCCESS, GET_ALL_SERIES_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_FAILURE } from "./ActionType";
+import { DELETE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS, FIND_PRODUCT_BY_SERIES_REQUEST, FIND_PRODUCT_BY_SERIES_SUCCESS, FIND_PRODUCT_BY_SERIES_FAILURE, FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST, FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, GET_ALL_SERIES_REQUEST, GET_ALL_SERIES_SUCCESS, GET_ALL_SERIES_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_FAILURE, FIND_NEW_PRODUCT_REQUEST, FIND_NEW_PRODUCT_SUCCESS, FIND_NEW_PRODUCT_FAILURE } from "./ActionType";
 
 const initialState = {
     products: [],
@@ -9,6 +9,7 @@ const initialState = {
     productSeries: [],
     productCarousel: [],
     series: [],
+    newProducts: [],
 }
 
 export const productListReducer = (state = initialState, action) => {
@@ -96,6 +97,27 @@ export const getAllSeriesNameReducer = (state = initialState, action) => {
         case GET_ALL_SERIES_SUCCESS:
             return { ...state, loading: false, error: null, series: action.payload }
         case GET_ALL_SERIES_FAILURE:
+            return { ...state, loading: false, error: action.payload }
+        default:
+            return state;
+    }
+}
+
+export const getNewProductReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case FIND_NEW_PRODUCT_REQUEST:
+            return { ...state, loading: true, error: null }
+        case FIND_NEW_PRODUCT_SUCCESS:
+            return { 
+                ...state, 
+                loading: false, 
+                error: null, 
+                newProducts: {
+                    ...state.newProducts,
+                    [action.payload.category]: action.payload.data
+                } 
+            }
+        case FIND_NEW_PRODUCT_FAILURE:
             return { ...state, loading: false, error: action.payload }
         default:
             return state;
