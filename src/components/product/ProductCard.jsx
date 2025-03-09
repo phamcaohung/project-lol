@@ -7,10 +7,11 @@ import { Skeleton } from "@mui/material"
 const ProductCard = ({ product, loading }) => {
     const navigate = useNavigate()
 
+
     return (
         <div
             onClick={() => navigate(`/product/${product.id}`, { state: product.series })}
-            className="productCard h-[28rem] transition-all cursor-pointer border-4 border-black rounded-lg"
+            className={`productCard ${product.imageTier === null ? '' : 'h-[30rem]'} transition-all cursor-pointer border-4 border-black rounded-lg`}
         >
             <div className="h-[18rem]">
                 {!loading
@@ -24,7 +25,7 @@ const ProductCard = ({ product, loading }) => {
                 }
             </div>
 
-            {product.imageTier !== "" &&
+            {product.imageTier &&
                 <div className="flex justify-center">
                     <img
                         style={{
@@ -38,10 +39,13 @@ const ProductCard = ({ product, loading }) => {
             }
 
 
-            <div className="textPart p-3">
-                <p className="font-bold text-xl text-center">
-                    {product.title}
-                </p>
+            <div className="p-3">
+                <div className="h-12 flex justify-center items-center">
+                    <p className="font-bold text-xl text-center">
+                        {product.title}
+                    </p>
+                </div>
+                
 
 
                 {product.discountPercent === 0 ? (
@@ -69,8 +73,7 @@ const ProductCard = ({ product, loading }) => {
                                     className='w-[1.5rem] h-[1.5rem] ml-1 mt-1'
                                     src="https://rankedkings.com/img/rp.png"
                                     alt=""
-                                />
-                                )
+                                />)
                             </p>
                             <p className="font-bold text-green-600 text-xl">
                                 ({product.discountPercent}% Off)
@@ -86,7 +89,7 @@ const ProductCard = ({ product, loading }) => {
                                 key={index}
                                 style={{ backgroundColor: `${item.color}` }}
                                 className="w-6 h-6 rounded-xl border-2 border-gray-800 mr-2 
-                                    hover:object-cover"
+                                        hover:object-cover"
                             >
                             </div>
                         )

@@ -21,7 +21,7 @@ const ProductsTable = () => {
     const searchParams = new URLSearchParams(decodedQueryString)
     const pageNumber = searchParams.get('page') || 1
 
-    // console.log("products: ", products);
+    console.log("products: ", products);
 
     const handleChangeName = (e) => {
         setName(e.target.value)
@@ -114,7 +114,7 @@ const ProductsTable = () => {
                                     <TableCell align="left">
                                         {!loading ? (
                                             <img
-                                                src={items.color.find((item) => item.name === "Default").image}
+                                                src={items.color.find((item) => item.name === "Default")?.image}
                                                 className="max-w-[100px] h-auto"
                                                 alt=""
                                             />

@@ -81,19 +81,22 @@ export default function Product() {
 
   const handleChangeSeriesName = (e, value) => {
     const searchParams = new URLSearchParams(location.search)
+    if (searchParams.get("page") > 1) {
+          searchParams.set("page", 1)
+    }
+          
     searchParams.set("series", value || "")
     if (searchParams.get("series") === "")
-      searchParams.delete("series")
+          searchParams.delete("series")
     const query = searchParams.toString()
     navigate({ search: `?${query}` })
   }
 
   useEffect(() => {
-    dispatch(getAllSeriesName())
-  }, [dispatch])
+    dispatch(getAllSeriesName(param.category))
+  }, [dispatch, param.category])
 
   useEffect(() => {
-    console.log("seriesValue: ", seriesValue);
     const [minPrice, maxPrice] = priceValue === null ? [0, 100000] : priceValue.split("-").map(Number)
 
     const data = {
@@ -282,6 +285,7 @@ export default function Product() {
                   <Pagination
                     count={products?.totalPages}
                     color='secondary'
+                    defaultPage={pageNumber}
                     onChange={handlePaginationChange}
                   />
                 </div>

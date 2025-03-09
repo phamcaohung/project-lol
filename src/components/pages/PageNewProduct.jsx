@@ -11,6 +11,8 @@ const PageNewProduct = ({ category }) => {
     const dispatch = useDispatch()
     const { newProducts } = useSelector(store => store.newProducts)
     const data = newProducts[category] || []
+    console.log("data: ", data);
+    
 
 
     useEffect(() => {
@@ -34,7 +36,7 @@ const PageNewProduct = ({ category }) => {
                             <div className="flex justify-center">
                                 <img
                                     className="hover:scale-90 transition duration-300 ease-in-out"
-                                    src={item.color?.find((para) => para.name === "Default").image}
+                                    src={item.color?.find((para) => para.name === "Default")?.image}
                                     alt=""
                                 />
                             </div>

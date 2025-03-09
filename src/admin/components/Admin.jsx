@@ -10,6 +10,7 @@ import CustomersTable from "./CustomersTable";
 import AdminDashboard from "./Dashboard";
 
 
+
 const menu = [
     { name: "Dashboard", path: "/admin", icon: <DashboardIcon/>},
     { name: "Products", path: "/admin/products", icon: <DashboardIcon/>},

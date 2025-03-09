@@ -66,6 +66,9 @@ const MainCarousel = ({ data, onChangeName }) => {
 
     return (
         <Grid container className="main-carousel">
+            <div>
+                <img src="../../../" alt="" />
+            </div>
             <Grid item xs={3} className="flex justify-center items-center ">
                 <List
                     sx={{ width: '100%', maxWidth: 360, color: "white" }}

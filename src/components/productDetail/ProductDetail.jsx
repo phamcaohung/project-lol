@@ -12,6 +12,7 @@ import ReactPlayer from 'react-player'
 import BrushIcon from '@mui/icons-material/Brush';
 import ProductSeries from './ProductSeries'
 import ProductSkill from './ProductSkill';
+import ProductCategory from './ProductCategory';
 
 
 
@@ -31,7 +32,6 @@ export default function ProductDetail() {
         image: "",
     })
     const [showYoutube, setShowYoutube] = useState(false)
-    const checkCategory = 'product?.category.name' 
 
     const navigate = useNavigate()
     const param = useParams()
@@ -60,7 +60,6 @@ export default function ProductDetail() {
         }
 
         dispatch(addItemToCart(data))
-        //navigate("/cart")
     }
 
     useEffect(() => {
@@ -83,15 +82,13 @@ export default function ProductDetail() {
         setSelectedColor(e)
     }
 
-
-
     const renderWithColor = (size) => (
         <>
             <div className='flex justify-center mb-5 -mt-9'>
                 {size.name !== "Default" && (
                     <div
                         style={{ backgroundColor: `${size.color}` }}
-                        className="w-6 h-6 rounded-xl border-2 border-gray-800"
+                        className='w-6 h-6 rounded-xl border-2 border-gray-800'
                     />
                 )}
             </div>
@@ -156,7 +153,7 @@ export default function ProductDetail() {
                                 />
                             ) : (
                                 <img
-                                    src={product?.imageUrl}
+                                    src={product?.imageUpload?.url}
                                     alt=""
                                     className="h-full w-full object-contain"
                                 />
@@ -264,42 +261,7 @@ export default function ProductDetail() {
                             </>
                         )}
 
-                        {checkCategory === "skin" ? (
-                            <Grid container spacing={2} className='pt-5'>
-                                <Grid item xs={4}>
-                                    <h1 className='text-lg lg:text-xl text-gray-300'>
-                                        Tier :
-                                    </h1>
-                                </Grid>
-                                <Grid item xs={8} className='flex items-center'>
-                                    {product?.imageTier !== "" &&
-                                        <img
-                                            className='w-[1.5rem] h-[1.5rem]'
-                                            src={product?.imageTier}
-                                            alt=""
-                                        />
-                                    }
-                                    <h1 className={`font-bold text-lg lg:text-xl text-gray-100 ${product?.imageTier !== "" && 'ml-5'}`}>
-                                        {product?.tier}
-                                    </h1>
-                                </Grid>
-                            </Grid>
-                        ) : (
-                            <Grid container spacing={2} className='pt-5'>
-                                <Grid item xs={4}>
-                                    <h1 className='text-lg lg:text-xl text-gray-300'>
-                                        Role :
-                                    </h1>
-                                </Grid>
-                                <Grid item xs={8} className='flex items-center'>
-                                    <h1 className={`font-bold text-lg lg:text-xl text-gray-100`}>
-                                        {product?.champion.role}
-                                    </h1>
-                                </Grid>
-                            </Grid>
-                        )}
-
-
+                        <ProductCategory data={product} />
 
                         <Grid container spacing={2} className='pt-5'>
                             <Grid item xs={4}>
@@ -309,7 +271,7 @@ export default function ProductDetail() {
                             </Grid>
                             <Grid item xs={8} className='flex items-center'>
                                 <h1 className='font-bold text-lg lg:text-xl text-gray-100'>
-                                    {product?.series}
+                                    {product?.skin?.series}
                                 </h1>
                             </Grid>
                         </Grid>
@@ -365,8 +327,8 @@ export default function ProductDetail() {
                                 </h1>
                             </Grid>
                         </Grid>
-                                               
-                        {product?.category.name === "champion" && <ProductSkill skill={product?.champion.skill}/>}
+
+                        {product?.category.name === "champion" && <ProductSkill skill={product?.champion.skill} />}
 
                         {/* Information */}
                         <div className="mt-4 lg:row-span-3 lg:mt-0">

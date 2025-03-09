@@ -17,6 +17,7 @@ export const findProducts = (reqData) => async (dispatch) => {
         pageNumber,
         pageSize } = reqData
     try {
+        console.log("page: ", pageNumber);
         const { data } = await api.get(`/api/products?tier=${tier}&minPrice=${minPrice}&maxPrice=${maxPrice}
         &minDiscount=${minDiscount}&category=${category}&name=${name}&series=${series}&stock=${stock}&sort=${sort}&pageNumber=${pageNumber}&pageSize=${pageSize}`)
 
@@ -40,11 +41,16 @@ export const findProductsById = (reqData) => async (dispatch) => {
 }
 
 
-export const createProduct = (product) => async (dispatch) => {
+export const createProduct = (formData) => async (dispatch) => {
     dispatch({ type: CREATE_PRODUCT_REQUEST })
 
     try {
-        const { data } = await api.post(`/api/admin/products/`, product)
+        const { data } = await api.post(`/api/admin/products/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })  
+            
 
         dispatch({
             type: CREATE_PRODUCT_SUCCESS,
@@ -76,11 +82,15 @@ export const deleteProduct = (productId) => async (dispatch) => {
     }
 }
 
-export const updateProduct = (productId, req) => async (dispatch) => {
+export const updateProduct = (productId, formData) => async (dispatch) => {
     dispatch({ type: UPDATE_PRODUCT_REQUEST })
 
     try {
-        const { data } = await api.put(`/api/admin/products/${productId}/update`, req)
+        const { data } = await api.put(`/api/admin/products/${productId}/update`, formData, {
+            headers: {
+                "Content-Type" : "multipart/form-data",
+            },
+        })
 
         dispatch({
             type: UPDATE_PRODUCT_SUCCESS,
@@ -126,11 +136,11 @@ export const findCarouselProductsBySeries = (sectionName) => async (dispatch) =>
 }
 
 
-export const getAllSeriesName = () => async (dispatch) => {
+export const getAllSeriesName = (category) => async (dispatch) => {
     dispatch({ type: GET_ALL_SERIES_REQUEST })
 
     try {
-        const { data } = await api.get(`/api/products/series/all`)
+        const { data } = await api.get(`/api/products/series/all?category=${category}`)
 
         dispatch({ type: GET_ALL_SERIES_SUCCESS, payload: data })
     } catch (error) {
