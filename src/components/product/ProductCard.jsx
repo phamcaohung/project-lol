@@ -1,37 +1,32 @@
-import React from "react";
-import "./ProductCard.css"
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Skeleton } from "@mui/material"
+import moment from "moment/moment";
+import InvertColorsOffIcon from '@mui/icons-material/InvertColorsOff';
 
 
-const ProductCard = ({ product, loading }) => {
+const ProductCard = ({ product }) => {
     const navigate = useNavigate()
-
+    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <div
+            className="cursor-pointer flex flex-col items-center rounded-lg shadow-lg overflow-hidden 
+                            w-[18rem] h-full mx-3 border pt-10 mt-10 hover:bg-white/10"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
             onClick={() => navigate(`/product/${product.id}`, { state: product.series })}
-            className={`productCard ${product.imageTier === null ? '' : 'h-[30rem]'} transition-all cursor-pointer border-4 border-black rounded-lg`}
         >
-            <div className="h-[18rem]">
-                {!loading
-                    ? <img
-                        className="h-full w-full object-cover"
-                        src={product.color.find((item) => item.name === "Default").image}
-                        alt=""
-                    />
 
-                    : <Skeleton variant="rectangular" height={280} />
-                }
-            </div>
+            <img
+                className='h-[13.5rem] w-full object-cover object-center'
+                alt=""
+                src={isHovered ? product.imageColor : product.imageUrl}
+            />
 
             {product.imageTier &&
                 <div className="flex justify-center">
                     <img
-                        style={{
-                            marginTop: "-25px",
-                        }}
-                        className="h-10 w-10"
+                        className="h-8 w-8 -mt-4"
                         src={product.imageTier}
                         alt=""
                     />
@@ -39,62 +34,38 @@ const ProductCard = ({ product, loading }) => {
             }
 
 
-            <div className="p-3">
-                <div className="h-12 flex justify-center items-center">
-                    <p className="font-bold text-xl text-center">
+            <div className="mt-3">
+                <div className="flex justify-center h-[5rem] items-center">
+                    <p className="font-bold text-2xl text-gray-100 break-words text-center">
                         {product.title}
                     </p>
                 </div>
-                
-
-
-                {product.discountPercent === 0 ? (
-                    <>
-                        <div className="flex justify-center mt-3">
-                            <p className="font-bold text-xl">
-                                {product.price}
-                            </p>
-                            <img
-                                className='w-[1.5rem] h-[1.5rem] ml-2 mt-1'
-                                src="https://rankedkings.com/img/rp.png"
-                                alt=""
-                            />
-                        </div>
-                    </>
-                ) : (
-                    <>
-                        <div className="flex justify-center mt-3">
-                            <p className="font-bold text-xl line-through opacity-50 mr-1">
-                                {product.price}
-                            </p>
-                            <p className="font-bold text-xl flex items-center mr-1">
-                                ({product.discountedPrice}
-                                <img
-                                    className='w-[1.5rem] h-[1.5rem] ml-1 mt-1'
-                                    src="https://rankedkings.com/img/rp.png"
-                                    alt=""
-                                />)
-                            </p>
-                            <p className="font-bold text-green-600 text-xl">
-                                ({product.discountPercent}% Off)
-                            </p>
-                        </div>
-                    </>
-                )}
-
                 <div className="flex items-center justify-center mt-3">
-                    {product.color.map((item, index) => (
-                        item.name !== "Default" && (
-                            <div
-                                key={index}
-                                style={{ backgroundColor: `${item.color}` }}
-                                className="w-6 h-6 rounded-xl border-2 border-gray-800 mr-2 
-                                        hover:object-cover"
-                            >
-                            </div>
-                        )
-                    ))}
+                    <h1 className='font-bold text-xl lg:text-xl text-gray-100'>
+                        {product?.price}
+                    </h1>
+                    <img
+                        className='w-[1.5rem] h-[1.5rem] ml-2 mt-0.5'
+                        src="https://rankedkings.com/img/rp.png"
+                        alt=""
+                    />
                 </div>
+                <div className="flex flex-wrap justify-center items-center mt-3 h-[5rem]">
+                    {product?.colors.length === 0 ? (
+                        <InvertColorsOffIcon color="error" fontSize="large"/>
+                    ) : (
+                        product?.colors.map((color) => (
+                            <div
+                                key={color}
+                                style={{ backgroundColor: `${color}` }}
+                                className='w-6 h-6 rounded-xl border-2 border-gray-800 m-2'
+                            />
+                        ))
+                    )}
+                </div>
+                <h1 className="font-bold text-lg text-gray-100 flex justify-center">
+                    Release: {moment(product?.releaseDate).format("MMMM DD, YYYY")}
+                </h1>
             </div>
         </div>
     )

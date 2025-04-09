@@ -138,7 +138,7 @@ const MainCarousel = ({ data, onChangeName }) => {
                     {data.map((items) =>
                         <div
                             key={items.id}
-                            className="border-2 border-black rounded-lg cursor-pointer"
+                            className="border-2 border-black rounded-lg cursor-pointer bg-white/10"
                             onClick={() => navigate(`/product/${items.id}`, { state: items.series })}
                         >
                             <img
@@ -158,11 +158,11 @@ const MainCarousel = ({ data, onChangeName }) => {
                                 </div>
                             }
                             <div className="mt-3 mb-3">
-                                <h2 className='font-bold lg:text-lg text-gray-100 text-center'>
+                                <h2 className='font-semibold lg:text-lg text-white text-center'>
                                     {items.title}
                                 </h2>
                                 <div className="flex items-center justify-center">
-                                    <h1 className='font-bold text-lg lg:text-lg text-gray-100'>
+                                    <h1 className='font-bold text-base lg:text-lg text-gray-200'>
                                         {items.price}
                                     </h1>
                                     <img

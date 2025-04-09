@@ -56,7 +56,6 @@ export const getUser = () => async (dispatch) => {
 
     try {
         const { data } = await api.get(`/api/users/profile`)
-        console.log("data ", data);
         dispatch(getUserSuccess(data))
     } catch (error) {
         dispatch(getUserFailure(error.message))

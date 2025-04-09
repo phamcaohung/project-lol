@@ -4,35 +4,35 @@ import { Grid } from '@mui/material'
 
 
 const ProductSkill = ({ skill }) => {
-    const [active, setActive] = useState(0)
+    const [active, setActive] = useState(skill[0].keyboard)
 
 
-    const handleText = (number) => {
-        setActive(number)
+    const handleText = (key) => {
+        setActive(key)
     }
 
     return (
         <div className="mt-7">
             <Grid container spacing={5}>
-                {skill.sort((a, b) => a.number - b.number).map((item) => (
-                    <Grid item key={item.number}>
+                {skill.sort((a, b) => a.id - b.id).map((item) => (
+                    <Grid item key={item.keyboard}>
                         <img
-                            className="w-[100px]"
+                            className={`${item.keyboard === active ? '' : 'opacity-60'} w-[100px]`}
                             src={item.image}
                             alt=""
-                            onClick={() => handleText(item.number)}
+                            onClick={() => handleText(item.keyboard)}
                         />
                     </Grid>
                 ))}
             </Grid>
             {skill.map((item) => (
-                <div key={item.number}>
-                    {active === item.number &&
+                <div key={item.keyboard}>
+                    {active === item.keyboard &&
                         <div>
-                            <h1 className="text-lg font-bold mt-5 mb-4">
+                            <h1 className="text-2xl font-bold mt-5 mb-4">
                                 {item.name}
                             </h1>
-                            <p className="text-gray-300">
+                            <p className="text-gray-300 text-xl">
                                 {item.description}
                             </p>
                         </div>

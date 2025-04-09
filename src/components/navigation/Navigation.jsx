@@ -8,7 +8,7 @@ import { getUser, logout } from '../../state/auth/Action'
 import { Avatar } from '@mui/material'
 import { deepPurple } from '@mui/material/colors'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MainCarousel from '../carousel/MainCarousel'
+
 
 
 const userNavigation = [

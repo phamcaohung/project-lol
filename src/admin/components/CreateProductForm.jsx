@@ -1,72 +1,21 @@
-import React, { Fragment, useEffect, useState } from "react";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createProduct, findProductsById, updateProduct } from '../../state/product/Action'
-import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Switch, TextField, Typography, styled } from "@mui/material";
-import { Listbox, Transition } from '@headlessui/react'
-import CheckIcon from '@mui/icons-material/Check';
-import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
+import { Button, Grid, InputLabel, MenuItem, Select, Switch, Typography, styled } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { useParams } from "react-router-dom";
 import utc from "dayjs/plugin/utc";
 import CategoryForm from "./CategoryForm";
+import { initialTier, initialDifficulty, initialRole, initialRegion, initialColor, initialSkill, categories } from '../../refactor/FilterData.js'
+import { CustomDatePicker, CustomFormControl, CustomTextField } from "../../refactor/CustomStyle.jsx";
 
 
 
 dayjs.extend(utc);
-
-
-
-const initialColor = [
-    { name: "Default", quantity: 1, color: "", image: null, inStock: true },
-]
-
-const initialTier = [
-    {
-        id: 1,
-        name: "Ultimate",
-        image: "https://www.skinexplorer.lol/_next/image?url=https%3A%2F%2Fraw.communitydragon.org%2Fpbe%2Fplugins%2Frcp-be-lol-game-data%2Fglobal%2Fdefault%2Fv1%2Frarity-gem-icons%2Fultimate.png&w=32&q=75"
-    },
-    {
-        id: 2,
-        name: "Mythic",
-        image: "https://www.skinexplorer.lol/_next/image?url=https%3A%2F%2Fraw.communitydragon.org%2Fpbe%2Fplugins%2Frcp-be-lol-game-data%2Fglobal%2Fdefault%2Fv1%2Frarity-gem-icons%2Fmythic.png&w=32&q=75"
-    },
-    {
-        id: 3,
-        name: "Legendary",
-        image: "https://www.skinexplorer.lol/_next/image?url=https%3A%2F%2Fraw.communitydragon.org%2Fpbe%2Fplugins%2Frcp-be-lol-game-data%2Fglobal%2Fdefault%2Fv1%2Frarity-gem-icons%2Flegendary.png&w=32&q=75"
-    },
-    {
-        id: 4,
-        name: "Epic",
-        image: "https://www.skinexplorer.lol/_next/image?url=https%3A%2F%2Fraw.communitydragon.org%2Fpbe%2Fplugins%2Frcp-be-lol-game-data%2Fglobal%2Fdefault%2Fv1%2Frarity-gem-icons%2Fepic.png&w=32&q=75"
-    },
-    {
-        id: 5,
-        name: "None",
-        image: ""
-    }
-]
-
-const initialDifficulty = [
-    { 
-        id: 1,
-        name: "LOW"
-    },
-    { 
-        id: 1,
-        name: "NORMAL"
-    },
-    { 
-        id: 1,
-        name: "HIGH"
-    }
-]
 
 
 
@@ -80,12 +29,11 @@ const CreateProductForm = () => {
     // const jwt = localStorage.getItem("jwt")
     const { product } = useSelector(store => store.product)
 
-    console.log("product: ", product);
-    
-
     const [imageFile, setImageFile] = useState(null)
-    const [selected, setSelected] = useState(initialTier[4])
-    const [selectedDiffculty, setSelectedDiffculty] = useState(initialDifficulty[0])
+    const [selectedTier, setSelectedTier] = useState(initialTier[4])
+    const [selectedDifficulty, setSelectedDifficulty] = useState(initialDifficulty[0])
+    const [selectedRole, setSelectedRole] = useState(initialRole[0])
+    const [selectedRegion, setSelectedRegion] = useState(initialRegion[0])
     const [productData, setProductData] = useState({
         title: "",
         skin: {
@@ -95,8 +43,16 @@ const CreateProductForm = () => {
         },
         champion: {
             role: "",
+            imageRole: "",
             difficulty: "",
-            region: ""
+            region: "",
+            imageRegion: "",
+            skill: initialSkill
+        },
+        chibi: {
+            tier: "",
+            imageTier: "",
+            champion: ""
         },
         price: 0,
         discountPercent: 0,
@@ -109,65 +65,74 @@ const CreateProductForm = () => {
         description: "",
     })
     const [colorForms, setColorForms] = useState(initialColor);
-    
-    useEffect(() => {
-        console.log("create data");
-        
-        setProductData(prevData => ({
-            ...prevData,
-            title: "",
-            skin: {
-                tier: "",
-                series: "",
-                imageTier: ""
-            },
-            champion: {
-                role: "",
-                difficulty: "",
-                region: ""
-            },
-            price: 0,
-            discountPercent: 0,
-            color: initialColor,
-            releaseDate: "",
-            trailerLink: "",
-            inStore: false,
-            canBeLooted: false,
-            category: "",
-            description: "",
-        }))
-        setColorForms(initialColor)
+    const [skillForm, setSkillForm] = useState(initialSkill)
 
+    useEffect(() => {
+        if (param.create === 'create') {
+            console.log("create data");
+
+            setProductData(prevData => ({
+                ...prevData,
+                title: "",
+                skin: {
+                    tier: "",
+                    series: "",
+                    imageTier: ""
+                },
+                champion: {
+                    role: "",
+                    imageRole: "",
+                    difficulty: "",
+                    region: "",
+                    imageRegion: "",
+                    skill: initialSkill
+                },
+                chibi: {
+                    tier: "",
+                    imageTier: "",
+                    champion: ""
+                },
+                price: 0,
+                discountPercent: 0,
+                color: initialColor,
+                releaseDate: "",
+                trailerLink: "",
+                inStore: false,
+                canBeLooted: false,
+                category: "",
+                description: "",
+            }))
+            setColorForms(initialColor)
+            setImageFile(null)
+        }
     }, [param.create, dispatch])
 
     useEffect(() => {
-        console.log("update data");
-        
-        const data = {
-            productId: param.productId
+        if (param.productId) {
+            const data = {
+                productId: param.productId
+            }
+            dispatch(findProductsById(data))
+
+            setProductData((prevData) => ({
+                ...prevData,
+                title: product?.title,
+                skin: product?.skin,
+                champion: product?.champion,
+                chibi: product?.chibi,
+                price: product?.price,
+                discountPercent: product?.discountPercent,
+                color: product?.color,
+                releaseDate: product?.releaseDate,
+                trailerLink: product?.trailerLink,
+                inStore: product?.inStore,
+                canBeLooted: product?.canBeLooted,
+                category: product?.category.name,
+                description: product?.description,
+            }))
+            setColorForms(product?.color)
+            setSkillForm(product?.champion?.skill.length === 0 ? initialSkill : product?.champion?.skill)
         }
-        dispatch(findProductsById(data))
-        
-            
-        setProductData((prevData) => ({
-            ...prevData,
-            title: product?.title,
-            skin: product?.skin,
-            champion: product?.champion,
-            price: product?.price,
-            discountPercent: product?.discountPercent,
-            color: product?.color,
-            releaseDate: product?.releaseDate,
-            trailerLink: product?.trailerLink,
-            inStore: product?.inStore,
-            canBeLooted: product?.canBeLooted,
-            category: product?.category.name,
-            description: product?.description,
-        }))
-        setColorForms(product?.color)
-        console.log("color: ", product?.color);
-        
-        console.log("data: ", productData);
     }, [product?.id, dispatch])
 
     const handleAddNewColor = () => {
@@ -199,7 +164,7 @@ const CreateProductForm = () => {
         const file = e.target.files[0]
         setImageFile(file)
         console.log(file);
-      };
+    };
 
     const handleSwitch = (e) => {
         const { name, checked } = e.target
@@ -229,61 +194,87 @@ const CreateProductForm = () => {
         }))
     }
 
-    const handleTierChange = (a) => {
-        setSelected(a)
+    const handleChangeByCategory = (value, type, category) => {
+        const typeMapping = {
+            tier: { tier: value.name, imageTier: value.image },
+            series: { series: value },
+            region: { region: value.name, imageRegion: value.image },
+            role: { role: value.name, imageRole: value.image },
+            difficulty: { difficulty: value.difficulty },
+            champion: { champion: value }
+        };
+
+        if (type === 'tier') setSelectedTier(value)
+        if (type === 'region') setSelectedRegion(value)
+        if (type === 'role') setSelectedRole(value)
+        if (type === 'difficulty') setSelectedDifficulty(value)
+
+
         setProductData((prevData) => ({
             ...prevData,
-            tier: a.name,
-            imageTier: a.image
+            [category]: {
+                ...prevData[category],
+                ...typeMapping[type]
+            }
+        }));
+    }
+
+    const handleSkillChampion = (e, index) => {
+        const { name, value } = e.target
+        const skill = [...skillForm]
+        skill[index][name] = value
+        setProductData((prevData) => ({
+            ...prevData,
+            champion: {
+                ...prevData.champion,
+                skill: skill
+            }
         }))
     }
 
-    const handleDiffcultyChange = (a) => {
-        setSelectedDiffculty(a)
+    const clearOption = (event, type, category) => {
+        event.stopPropagation()
         setProductData((prevData) => ({
-            ...prevData,
-            difficulty: a.difficulty,
+          ...prevData,
+          [category]: {
+            ...prevData[category],
+            [type]: ""
+          }
         }))
-    }
+      }
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        const updateProductData = {
-            ...productData,
-            tier: selected.name,
-            imageTier: selected.image
-        }
+        const updateProductData = categories.reduce((data, cat) => ({
+            ...data,
+            [cat]: productData.category === cat ? productData[cat] : null
+        }), { ...productData });
 
         const formData = new FormData()
-        // formData.append('product', updateProductData)
         formData.append('product', new Blob(
-            [JSON.stringify(updateProductData)], { 
-                type: "application/json" 
-            })
+            [JSON.stringify(updateProductData)], {
+            type: "application/json"
+        })
         )
 
-
-        if(imageFile == null) {
+        if (imageFile == null) {
             const image = new File([product?.imageUpload], product?.imageUpload?.name)
             setImageFile(image)
         }
         console.log("imageFile", imageFile);
-        
+
         formData.append('imageFile', imageFile)
 
 
-        console.log([...formData.entries()]);
-        
-        
+        // param.productId
+        //     ? dispatch(updateProduct(param.productId, formData))
+        //     : dispatch(createProduct(formData))
+        // console.log(updateProductData);
+
         param.productId
-            ? dispatch(updateProduct(param.productId, formData))
-            : dispatch(createProduct(formData))
-        console.log(updateProductData);
-        
-        // param.productId 
-        //     ? console.log("productDataUpdate: ", updateProductData)
-        //     : console.log("productDataCreate: ", formData)
+            ? console.log("productDataUpdate: ", updateProductData)
+            : console.log("productDataCreate: ", updateProductData)
     }
 
 
@@ -301,13 +292,11 @@ const CreateProductForm = () => {
         overflow: 'hidden',
         width: 1,
     });
-    
-    console.log("productData: ", productData);
-    console.log(product?.imageUpload?.url);
-    console.log("colorForms: ", colorForms);
-    
-    
 
+    useEffect(() => {
+        setSelectedTier(initialTier[4])
+    }, [productData?.category])
+    
     return (
         <div className='p-10'>
             <Typography
@@ -315,16 +304,15 @@ const CreateProductForm = () => {
                 sx={{
                     textAlign: "center"
                 }}
-                className="py-10 text-center"
+                className="py-10 text-center text-white"
             >
                 {param.productId ? `Edit Product Id ${param.productId}` : `Add New Product`}
             </Typography>
-                                    
 
             <form
                 onSubmit={handleSubmit}
                 className="min-h-screen"
-                
+
             >
                 <Grid container spacing={2}>
                     {
@@ -353,24 +341,25 @@ const CreateProductForm = () => {
                                         alt=""
                                     />
                                 </Grid>
-                            )  
+                            )
                         )
                     }
-                    
+
                     <Grid item xs={8} className="flex items-center">
                         <Button
                             component="label"
                             variant="contained"
                             onChange={handleFileChange}
                             startIcon={<CloudUploadIcon />}
+                            color="error"
                         >
                             Upload Image file
                             <VisuallyHiddenInput type="file" />
                         </Button>
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <TextField
+                    <Grid item xs={12} sm={6} marginTop={5}>
+                        <CustomTextField
                             fullWidth
                             label="Title"
                             name="title"
@@ -380,8 +369,8 @@ const CreateProductForm = () => {
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
+                    <Grid item xs={12} sm={6} marginTop={5}>
+                        <CustomFormControl fullWidth>
                             <InputLabel>Category</InputLabel>
                             <Select
                                 name="category"
@@ -392,162 +381,54 @@ const CreateProductForm = () => {
                             >
                                 <MenuItem value="skin">Skin</MenuItem>
                                 <MenuItem value="champion">Champion</MenuItem>
+                                <MenuItem value="chibi">Chibi</MenuItem>
                             </Select>
-                        </FormControl>
+                        </CustomFormControl>
                     </Grid>
 
                     <Grid item xs={12} marginBottom={2}>
-                        <CategoryForm 
+                        <CategoryForm
                             productId={param.productId}
-                            handleTierChange={handleTierChange}
-                            setSelected={setSelected}
-                            selected={selected}
+                            selectedTier={selectedTier}
                             productData={productData}
                             initialTier={initialTier}
-                            handleChange={handleChange}
-                            Fragment={Fragment}
                             classNames={classNames}
                             initialDifficulty={initialDifficulty}
-                            handleDiffcultyChange={handleDiffcultyChange}
-                            setSelectedDiffculty={setSelectedDiffculty}
-                            selectedDiffculty={selectedDiffculty}
+                            selectedDifficulty={selectedDifficulty}
+                            initialRegion={initialRegion}
+                            initialRole={initialRole}
+                            selectedRegion={selectedRegion}
+                            selectedRole={selectedRole}
+                            handleChangeByCategory={handleChangeByCategory}
+                            handleSkillChampion={handleSkillChampion}
+                            skillForm={skillForm}
+                            clearOption={clearOption}
                         />
                     </Grid>
-                    
-                    
-                    {/* <Grid item xs={12} sm={6}>
-                        Tier:
-                        <Listbox value={selected} onChange={param.productId ? handleTierChange : setSelected} className="h-full">
-                            {({ open }) => (
-                                <>
-                                    <div className="relative h-full">
-                                        <Listbox.Button className="h-14 relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
-                                            {param.productId ? (
-                                                <>
-                                                    <span className="flex items-center">
-                                                        {productData?.skin?.imageTier !== "" &&
-                                                            <img
-                                                                src={productData?.skin?.imageTier}
-                                                                alt=""
-                                                                className="h-[2rem] w-[2rem]"
-                                                            />
-                                                        }
-                                                        <span className={`${productData?.skin?.imageTier === "" ? 'ml-14' : ''} ml-3 block truncate font-bold`}>
-                                                            {productData?.skin?.tier}
-                                                        </span>
-                                                    </span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span className="flex items-center">
-                                                        {selected.image !== "" &&
-                                                            <img
-                                                                src={selected.image}
-                                                                alt=""
-                                                                className="h-[2rem] w-[2rem]"
-                                                            />
-                                                        }
-                                                        <span className={`${selected.image === "" ? 'ml-14' : ''} ml-3 block truncate font-bold`}>
-                                                            {selected.name}
-                                                        </span>
-                                                    </span>
-                                                </>
-                                            )}
 
-                                            <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                                <UnfoldMoreIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
-                                            </span>
-                                        </Listbox.Button>
-
-                                        <Transition
-                                            show={open}
-                                            as={Fragment}
-                                            leave="transition ease-in duration-100"
-                                            leaveFrom="opacity-100"
-                                            leaveTo="opacity-0"
-                                        >
-                                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                                {initialTier.map((person) => (
-                                                    <Listbox.Option
-                                                        key={person.id}
-                                                        className={({ active }) =>
-                                                            classNames(
-                                                                active ? 'bg-indigo-600 text-white' : 'text-gray-900',
-                                                                'relative cursor-default select-none py-2 pl-3 pr-9'
-                                                            )
-                                                        }
-                                                        value={person}
-                                                    >
-                                                        {({ selected, active }) => (
-                                                            <>
-                                                                <div className="flex items-center">
-                                                                    {person.image !== "" ? (
-                                                                        <img src={person.image} alt="" className="h-[2rem] w-[2rem]" />
-                                                                    ) : (
-                                                                        <div className="h-[2rem] w-[2rem]"></div>
-                                                                    )}
-
-                                                                    <span
-                                                                        className={classNames(selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate')}
-                                                                    >
-                                                                        {person.name}
-                                                                    </span>
-                                                                </div>
-
-                                                                {selected ? (
-                                                                    <span
-                                                                        className={classNames(
-                                                                            active ? 'text-white' : 'text-indigo-600',
-                                                                            'absolute inset-y-0 right-0 flex items-center pr-4'
-                                                                        )}
-                                                                    >
-                                                                        <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                                                    </span>
-                                                                ) : null}
-                                                            </>
-                                                        )}
-                                                    </Listbox.Option>
-                                                ))}
-                                            </Listbox.Options>
-                                        </Transition>
-                                    </div>
-                                </>
-                            )}
-                        </Listbox>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6} marginTop={3}>
-                        <TextField
-                            fullWidth
-                            label="Series"
-                            name="series"
-                            value={productData?.skin?.series}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Grid> */}
-
-                    <Grid item xs={12} sm={2} marginTop={1}>
+                    <Grid item xs={12} sm={2} marginTop={1} className="text-white">
                         In Store:
                         <Switch
                             onChange={handleSwitch}
                             name="inStore"
                             checked={productData.inStore}
+                            color="error"
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={2} marginTop={1}>
+                    <Grid item xs={12} sm={2} marginTop={1} className="text-white">
                         Can Be Looted:
                         <Switch
                             onChange={handleSwitch}
                             name="canBeLooted"
                             checked={productData.canBeLooted}
+                            color="error"
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={3}>
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <DatePicker
+                            <CustomDatePicker
                                 value={dayjs.utc(productData.releaseDate)}
                                 onChange={handleDate}
                                 name="releaseDate"
@@ -557,7 +438,7 @@ const CreateProductForm = () => {
                     </Grid>
 
                     <Grid item xs={12} sm={5}>
-                        <TextField
+                        <CustomTextField
                             fullWidth
                             label="Trailer Link"
                             name="trailerLink"
@@ -568,7 +449,7 @@ const CreateProductForm = () => {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <CustomTextField
                             fullWidth
                             label="Price"
                             name="price"
@@ -580,7 +461,7 @@ const CreateProductForm = () => {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField
+                        <CustomTextField
                             fullWidth
                             label="Discounted Percent"
                             name="discountPercent"
@@ -592,7 +473,7 @@ const CreateProductForm = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <TextField
+                        <CustomTextField
                             fullWidth
                             id="outlined-multiline-static"
                             multiline
@@ -619,7 +500,7 @@ const CreateProductForm = () => {
                             </Grid>
 
                             <Grid item xs={12} sm={3} className="flex justify-center items-center">
-                                <TextField
+                                <CustomTextField
                                     label="Image"
                                     name="image"
                                     value={item.image}
@@ -632,37 +513,34 @@ const CreateProductForm = () => {
                             <Grid item xs={12} sm={1} className="flex justify-center items-center">
                                 <div
                                     style={{ backgroundColor: `${item.color}` }}
-                                    className="w-6 h-6 rounded-xl border-2 border-gray-800"
+                                    className="w-6 h-6 rounded-xl border-2 border-white"
                                 >
                                 </div>
                             </Grid>
 
                             <Grid item xs={12} sm={1} className="flex justify-center items-center">
-                                <TextField
+                                <CustomTextField
                                     label="Color"
                                     name="color"
                                     value={item.color}
                                     onChange={(event) => handleColorChange(event, index)}
                                     fullWidth
-                                    required
-                                    disabled={item.name === "Default"}
                                 />
                             </Grid>
 
                             <Grid item xs={12} sm={3} className="flex justify-center items-center">
-                                <TextField
+                                <CustomTextField
                                     label="Name"
                                     name="name"
                                     value={item.name}
                                     onChange={(event) => handleColorChange(event, index)}
                                     required
                                     fullWidth
-                                    disabled={item.name === "Default"}
                                 />
                             </Grid>
 
                             <Grid item xs={12} sm={1} className="flex justify-center items-center">
-                                <TextField
+                                <CustomTextField
                                     label="Quantity"
                                     name="quantity"
                                     type="number"
@@ -675,14 +553,6 @@ const CreateProductForm = () => {
 
                             {item.name !== "Default" &&
                                 <Grid item xs={12} sm={1} className="flex justify-center items-center">
-                                    {/* <DeleteForeverIcon
-                                        sx={{
-                                            width: "3rem",
-                                            height: "3rem",
-                                            textAlign: "center"
-                                        }}
-                                        onClick={() => handleDeleteColor(index)}
-                                    /> */}
                                     <Button
                                         variant="contained"
                                         sx={{ p: 1.8 }}
@@ -708,7 +578,7 @@ const CreateProductForm = () => {
                             sx={{ p: 1.8 }}
                             className="py-20"
                             size="medium"
-                            color="success"
+                            color="secondary"
                             onClick={handleAddNewColor}
                         >
                             Add New Color
@@ -722,6 +592,7 @@ const CreateProductForm = () => {
                             className="py-20 w-[30rem]"
                             size="large"
                             type="submit"
+                            color="error"
                         >
                             {param.productId ? `Update Product Id ${param.productId}` : `Add New Product`}
                         </Button>

@@ -3,6 +3,6 @@ export const navigation = {
     { name: 'Home ', id: '' },
     { name: 'Skin ', id: '/category/skin' },
     { name: 'Champion', id: '/category/champion' },
-    { name: 'Little Legend', id: '/category/littleLegend' },
+    { name: 'Chibi', id: '/category/chibi' },
   ],
 }

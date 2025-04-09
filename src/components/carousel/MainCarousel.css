@@ -1,9 +1,7 @@
 .main-carousel {
-    /* background-image: url("https://media.altchar.com/prod/images/gm_article_promo_image/00e13ab24c55-the-new-high-noon-skins.jpg"); */
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 80vh;
-    /* background-color: white; */
 }
 
 .slick-slider {

@@ -42,6 +42,7 @@ const HomePage = () => {
                 onChangeName={handleChangeName}
             />
 
+            {/* 4 block */}
             <div className="mx-20">
                 <Grid container spacing={10} className="text-white flex items-center">
                     <Grid item xs={3}>
@@ -74,6 +75,7 @@ const HomePage = () => {
                 </Grid>
             </div>
 
+            {/* Block Skin */}
             <div className="mx-20">
                 <Grid
                     container
@@ -112,6 +114,7 @@ const HomePage = () => {
                 </Grid>
             </div>
 
+            {/* 2 block */}
             <div className="mx-20">
                 <Grid
                     container
@@ -195,6 +198,8 @@ const HomePage = () => {
             <PageNewProduct category={"skin"} />
 
             <PageNewProduct category={"champion"} />
+
+            <PageNewProduct category={"chibi"} />
         </div>
     )
 }

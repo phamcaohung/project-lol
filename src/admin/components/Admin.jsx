@@ -6,17 +6,16 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CreateProductForm from "./CreateProductForm";
 import ProductsTable from "./ProductsTable";
 import OrdersTable from "./OrdersTable";
-import CustomersTable from "./CustomersTable";
 import AdminDashboard from "./Dashboard";
 
 
 
 const menu = [
-    { name: "Dashboard", path: "/admin", icon: <DashboardIcon/>},
-    { name: "Products", path: "/admin/products", icon: <DashboardIcon/>},
-    { name: "Customers", path: "/admin/customers", icon: <DashboardIcon/>},
-    { name: "Orders", path: "/admin/orders", icon: <DashboardIcon/>},
-    { name: "Create Product", path: "/admin/product/create", icon: <DashboardIcon/>},
+    { name: "Dashboard", path: "/admin", icon: <DashboardIcon color="error" fontSize="large"/>},
+    { name: "Products", path: "/admin/products", icon: <DashboardIcon color="error" fontSize="large"/>},
+    { name: "Customers", path: "/admin/customers", icon: <DashboardIcon color="error" fontSize="large"/>},
+    { name: "Orders", path: "/admin/orders", icon: <DashboardIcon color="error" fontSize="large"/>},
+    { name: "Create Product", path: "/admin/product/create", icon: <DashboardIcon color="error" fontSize="large"/>},
 ]
 
 const Admin = () => {
@@ -30,7 +29,6 @@ const Admin = () => {
                 flexDirection: "column",
                 justifyContent: "space-between",
                 height: "100%",
-
             }}
         >
             <>
@@ -40,6 +38,7 @@ const Admin = () => {
                             key={item.name}
                             disablePadding
                             onClick={() => navigate(item.path)} 
+                            className="text-white hover:bg-black"
                         >
                             <ListItemButton>
                                 <ListItemIcon>
@@ -56,10 +55,10 @@ const Admin = () => {
             
 
             <List>
-                <ListItem disablePadding>
+                <ListItem disablePadding className="text-white">
                     <ListItemButton>
                         <ListItemIcon>
-                            <AccountCircleIcon/>
+                            <AccountCircleIcon color="error" fontSize="large"/>
                             
                         </ListItemIcon>
                         <ListItemText>Account</ListItemText>
@@ -70,11 +69,11 @@ const Admin = () => {
     )
 
     return (
-        <div className="relative flex h-[100vh]">
+        <div className="relative flex h-full bg-[#111827]">
             <CssBaseline/>
 
-            <div className="w-[15%] border border-r-gray-300 h-full fixed top-0">
-                    {drawer}
+            <div className="w-[15%] border border-r-gray-400 border-t-0 border-l-0 h-full fixed top-0">
+                {drawer}
             </div>
 
             <div className="w-[85%] h-full ml-[15%]">
@@ -84,7 +83,6 @@ const Admin = () => {
                     <Route path="/product/edit/:productId" element={<CreateProductForm/>}></Route>
                     <Route path="/products" element={<ProductsTable/>}></Route>
                     <Route path="/orders" element={<OrdersTable/>}></Route>
-                    <Route path="/customers" element={<CustomersTable/>}></Route>
                 </Routes>
             </div>
         </div>

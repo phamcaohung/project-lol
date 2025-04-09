@@ -1,26 +1,15 @@
 import { api } from "../../config/apiConfig"
-import { CREATE_PRODUCT_FAILURE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS, UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_REQUEST, UPDATE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_SERIES_REQUEST, FIND_PRODUCT_BY_SERIES_SUCCESS, FIND_PRODUCT_BY_SERIES_FAILURE, FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST, FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, GET_ALL_SERIES_REQUEST, GET_ALL_SERIES_SUCCESS, GET_ALL_SERIES_FAILURE, FIND_NEW_PRODUCT_REQUEST, FIND_NEW_PRODUCT_SUCCESS, FIND_NEW_PRODUCT_FAILURE } from "./ActionType"
+import { CREATE_PRODUCT_FAILURE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAILURE, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_ID_FAILURE, FIND_PRODUCT_BY_ID_REQUEST, FIND_PRODUCT_BY_ID_SUCCESS, FIND_PRODUCT_FAILURE, FIND_PRODUCT_REQUEST, FIND_PRODUCT_SUCCESS, UPDATE_PRODUCT_FAILURE, UPDATE_PRODUCT_REQUEST, UPDATE_PRODUCT_SUCCESS, FIND_PRODUCT_BY_SERIES_REQUEST, FIND_PRODUCT_BY_SERIES_SUCCESS, FIND_PRODUCT_BY_SERIES_FAILURE, FIND_CAROUSEL_PRODUCT_BY_SERIES_REQUEST, FIND_CAROUSEL_PRODUCT_BY_SERIES_SUCCESS, FIND_CAROUSEL_PRODUCT_BY_SERIES_FAILURE, GET_ALL_SERIES_REQUEST, GET_ALL_SERIES_SUCCESS, GET_ALL_SERIES_FAILURE, FIND_NEW_PRODUCT_REQUEST, FIND_NEW_PRODUCT_SUCCESS, FIND_NEW_PRODUCT_FAILURE, FIND_PRODUCT_BY_CHAMPION_REQUEST, FIND_PRODUCT_BY_CHAMPION_SUCCESS, FIND_PRODUCT_BY_CHAMPION_FAILURE, FIND_PRODUCT_BY_REGION_REQUEST, FIND_PRODUCT_BY_REGION_SUCCESS, FIND_PRODUCT_BY_REGION_FAILURE, GET_ALL_SERIES_SKIN_REQUEST, GET_ALL_SERIES_SKIN_SUCCESS, GET_ALL_SERIES_SKIN_FAILURE } from "./ActionType"
 
 export const findProducts = (reqData) => async (dispatch) => {
     dispatch({ type: FIND_PRODUCT_REQUEST })
 
-    const {
-        tier,
-        minPrice,
-        maxPrice,
-        minDiscount,
-        category,
-        stock,
-        sort,
-        name,
-        series,
-        pageNumber,
-        pageSize } = reqData
     try {
-        console.log("page: ", pageNumber);
-        const { data } = await api.get(`/api/products?tier=${tier}&minPrice=${minPrice}&maxPrice=${maxPrice}
-        &minDiscount=${minDiscount}&category=${category}&name=${name}&series=${series}&stock=${stock}&sort=${sort}&pageNumber=${pageNumber}&pageSize=${pageSize}`)
-
+        const { data } = await api.post('/api/products/filter', reqData , {
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })  
         dispatch({ type: FIND_PRODUCT_SUCCESS, payload: data })
     } catch (error) {
         dispatch({ type: FIND_PRODUCT_FAILURE, payload: error.message })
@@ -47,7 +36,7 @@ export const createProduct = (formData) => async (dispatch) => {
     try {
         const { data } = await api.post(`/api/admin/products/`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data'
+                "Content-Type" : "multipart/form-data",
             }
         })  
             
@@ -109,11 +98,50 @@ export const findProductsBySeries = (reqData) => async (dispatch) => {
     const { id, series } = reqData
 
     try {
-        const { data } = await api.get(`/api/products/series?series=${series}&id=${id}`)
+        const { data } = await api.get(`/api/products/skin/series?series=${series}&id=${id}`)
 
         dispatch({ type: FIND_PRODUCT_BY_SERIES_SUCCESS, payload: data })
     } catch (error) {
         dispatch({ type: FIND_PRODUCT_BY_SERIES_FAILURE, payload: error.message })
+    }
+}
+
+export const findSkinProductsBySeries = (reqData) => async (dispatch) => {
+    dispatch({ type: FIND_PRODUCT_BY_SERIES_REQUEST })
+    const { id, series } = reqData
+
+    try {
+        const { data } = await api.get(`/api/products/skin/series?series=${series}&id=${id}`)
+
+        dispatch({ type: FIND_PRODUCT_BY_SERIES_SUCCESS, payload: data })
+    } catch (error) {
+        dispatch({ type: FIND_PRODUCT_BY_SERIES_FAILURE, payload: error.message })
+    }
+}
+
+export const findChampionProductsByRegion = (reqData) => async (dispatch) => {
+    dispatch({ type: FIND_PRODUCT_BY_REGION_REQUEST })
+    const { id, region } = reqData
+
+    try {
+        const { data } = await api.get(`/api/products/champion/region?region=${region}&id=${id}`)
+
+        dispatch({ type: FIND_PRODUCT_BY_REGION_SUCCESS, payload: data })
+    } catch (error) {
+        dispatch({ type: FIND_PRODUCT_BY_REGION_FAILURE, payload: error.message })
+    }
+}
+
+export const findChibiProductsByChampion = (reqData) => async (dispatch) => {
+    dispatch({ type: FIND_PRODUCT_BY_CHAMPION_REQUEST })
+    const { id, champion } = reqData
+
+    try {
+        const { data } = await api.get(`/api/products/chibi/champion?champion=${champion}&id=${id}`)
+
+        dispatch({ type: FIND_PRODUCT_BY_CHAMPION_SUCCESS, payload: data })
+    } catch (error) {
+        dispatch({ type: FIND_PRODUCT_BY_CHAMPION_FAILURE, payload: error.message })
     }
 }
 
@@ -136,15 +164,15 @@ export const findCarouselProductsBySeries = (sectionName) => async (dispatch) =>
 }
 
 
-export const getAllSeriesName = (category) => async (dispatch) => {
-    dispatch({ type: GET_ALL_SERIES_REQUEST })
+export const getAllSeriesSkin = (category) => async (dispatch) => {
+    dispatch({ type: GET_ALL_SERIES_SKIN_REQUEST })
 
     try {
         const { data } = await api.get(`/api/products/series/all?category=${category}`)
 
-        dispatch({ type: GET_ALL_SERIES_SUCCESS, payload: data })
+        dispatch({ type: GET_ALL_SERIES_SKIN_SUCCESS, payload: data })
     } catch (error) {
-        dispatch({ type: GET_ALL_SERIES_FAILURE, payload: error.message })
+        dispatch({ type: GET_ALL_SERIES_SKIN_FAILURE, payload: error.message })
     }
 }
 

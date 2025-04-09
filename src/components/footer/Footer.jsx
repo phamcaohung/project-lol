@@ -1,174 +1,85 @@
 import React from "react";
-import { Grid, Button, TextField } from "@mui/material";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import EmailIcon from '@mui/icons-material/Email';
-import PhoneIcon from '@mui/icons-material/Phone';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { Grid } from "@mui/material";
+import { YouTube, Twitter, Facebook, Instagram, Reddit } from '@mui/icons-material';
 
 const Footer = () => {
+
+    const title = ["ABOUT SKIN", "ABOUT CHAMPION", "ABOUT CHIBI", "HELP US IMPROVE", "SUPPORT", "CART STATUS"]
+    const name = ["PRIVACY NOTICE", "TERMS OF SERVICE", "COOKIE PREFERENCES"]
+    const text = ["Blood", "Fantasy Violence", "Mild Suggestive Themes", "Use of Alcohol and Tobacco", "Online Interactions Not Rated by the ESRB"]
+    const icons = [
+        { id: 1, Icon: YouTube },
+        { id: 2, Icon: Twitter },
+        { id: 3, Icon: Facebook },
+        { id: 4, Icon: Instagram },
+        { id: 5, Icon: Reddit },
+    ]
+
     return (
-        <div className="mx-20 mt-20">
-            <Grid container spacing={10}>
-                <Grid item xs={4}>
-                    <div>
+        <div className="">
+            <div className="h-20 flex bg-[#292929]">
+                <Grid container className="mx-20">
+                    {title.map((item, index) =>
+                        <Grid key={index} item xs={12} sm={2} className="flex justify-center">
+                            <div className="my-auto px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-500">
+                                <h2 className="text-white text-xl font-semibold tracking-[2px]">
+                                    {item}
+                                </h2>
+                            </div>
+                        </Grid>
+                    )}
+                </Grid>
+            </div>
+
+            <div className="bg-[#111111]">
+                <div className="flex justify-center pt-10">
+                    {icons.map(({ id, Icon }) => (
+                        <span key={id} className="bg-[#292929] my-auto p-2 rounded-xl mr-5 last:mr-0">
+                            <Icon className='text-white' sx={{ fontSize: "40px" }} />
+                        </span>
+                    ))}
+                </div>
+
+                <div className="flex justify-center pt-10">
+                    <p className="text-gray-400 text-center">
+                        2025 Riot Games, Inc. League of Legends and all related logos, characters, classNames
+                        and distinctive <br />
+                        likenesses thereof are exclusive property of Riot Games, Inc. All Rights Reserved
+                    </p>
+                </div>
+
+                <div className="pt-10">
+                    <div className="flex justify-center">
+                        {name.map((item, index) => (
+                            <div key={index} className="my-auto px-4 py-2 rounded-lg hover:bg-gray-500 transition duration-500">
+                                <h2 className="text-white text-lg font-semibold tracking-[2px]">
+                                    {item}
+                                </h2>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="pt-10 pb-20 flex justify-center">
+                    <div className="flex justify-center bg-[#1A1A1A] px-8 py-7">
                         <img
-                            src="https://oyster.ignimgs.com/mediawiki/apis.ign.com/league-of-legends/8/86/League_of_legends_logo_transparent.png"
+                            className="pr-5 w-28"
+                            src="https://cmsassets.rgpub.io/sanity/images/dsfx7636/riotbar/7e684cc4765a7d059f9018e16717472d7082dc37-65x97.png?"
                             alt=""
                         />
-                        <p className="text-2xl text-justify">
-                            Dolore erat dolor sit lorem vero amet. Sed sit lorem magna,
-                            ipsum no sit erat lorem et magna ipsum dolore amet erat.
-                        </p>
-
-                        <div className="mt-8">
-                            <LocationOnIcon fontSize="large" />
-                            <span className="text-xl ml-2">
-                                116/78B Nguyễn Cư Trinh, Quận 1, Hồ Chí Minh city
-                            </span>
-                        </div>
-                        <div className="text-xl mt-4">
-                            <EmailIcon fontSize="large" />
-                            <span className="ml-3">
-                                phamcao77@gmail.com
-                            </span>
-                        </div>
-                        <div className="text-xl mt-4">
-                            <PhoneIcon fontSize="large" />
-                            <span className="ml-3">
-                                +036 834 9903
-                            </span>
-                        </div>
+                        <span>
+                            {text.map((item, index) => (
+                                <span key={index}>
+                                    <h2 className="text-white font-semibold text-lg tracking-[1px]">
+                                        {item}
+                                    </h2>
+                                </span>
+                            ))}
+                        </span>
                     </div>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <div>
-                        <h2 className="text-4xl font-bold mb-10 mt-24">
-                            Quick Links
-                        </h2>
-
-                        <div>
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Home
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Our Shop
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Shopping Cart
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Checkout
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Contact Us
-                            </span>
-                        </div>
-                    </div>
-                </Grid>
-
-
-                <Grid item xs={2}>
-                    <div>
-                        <h2 className="text-4xl font-bold mb-10 mt-24">
-                            Quick Links
-                        </h2>
-
-                        <div>
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Home
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Our Shop
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Shopping Cart
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Checkout
-                            </span>
-                        </div>
-
-                        <div className="mt-2">
-                            <NavigateNextIcon fontSize="large" />
-                            <span className="text-2xl ml-2">
-                                Contact Us
-                            </span>
-                        </div>
-                    </div>
-                </Grid>
-
-                <Grid item xs={3}>
-                    <div>
-                        <h2 className="text-4xl font-bold mb-10 mt-24">
-                            Newsletter
-                        </h2>
-                        <TextField
-                            margin="normal"
-                            label="Your Name"
-                            fullWidth
-                        />
-                        <TextField
-                            margin="normal"
-                            label="Your Email"
-                            fullWidth
-                            color="info"
-                        />
-                        <Button
-                            fullWidth
-                            sx={{
-                                marginTop: "15px",
-                                py: "20px",
-                                fontSize: "1.2rem",
-                                color: "#F87171",
-                                border: "1px solid #F87171",
-                                ":hover": {
-                                    color: "black",
-                                    backgroundColor: "white",
-                                    border: "black"
-                                }
-                            }}
-                        >
-                            Subscribe Now
-                        </Button>
-                    </div>
-                </Grid>
-            </Grid>
-
-            <hr className="bg-black h-[0.2rem] mt-5" />
-            <div className="text-center text-3xl py-6">
-                © Your Site Name. All Rights Reserved
+                </div>
             </div>
+
         </div>
     )
 }

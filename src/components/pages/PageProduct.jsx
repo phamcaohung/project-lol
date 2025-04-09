@@ -8,7 +8,8 @@ const PageProduct = ({ name }) => {
     const navigate = useNavigate()
     const { productCarousel } = useSelector(store => store.productCarousel)
     const productSeries = productCarousel[name] || []
-    const productRandom = productSeries[Math.floor(Math.random(0, productSeries.length) * 11)]
+    const random = Math.floor(Math.random(0, productSeries.length) * 11)
+    const productRandom = productSeries[random]
 
 
     useEffect(() => {

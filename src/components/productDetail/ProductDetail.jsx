@@ -1,18 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { Box, Button, Grid, LinearProgress, Rating } from '@mui/material'
 import ProductReviewCard from './ProductReviewCard'
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { findProductsById, findProductsBySeries } from '../../state/product/Action';
+import { findChampionProductsByRegion, findChibiProductsByChampion, findProductsById, findProductsBySeries, findSkinProductsBySeries } from '../../state/product/Action';
 import { addItemToCart } from '../../state/cart/Action';
 import moment from "moment/moment";
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import ReactPlayer from 'react-player'
 import BrushIcon from '@mui/icons-material/Brush';
-import ProductSeries from './ProductSeries'
 import ProductSkill from './ProductSkill';
 import ProductCategory from './ProductCategory';
+import ProductCard from '../product/ProductCard';
 
 
 
@@ -32,7 +32,7 @@ export default function ProductDetail() {
         image: "",
     })
     const [showYoutube, setShowYoutube] = useState(false)
-
+    const checkRef = useRef(null)
     const navigate = useNavigate()
     const param = useParams()
     const dispatch = useDispatch()
@@ -40,8 +40,9 @@ export default function ProductDetail() {
     const location = useLocation();
     const series = location.state;
     const { productSeries } = useSelector(store => store.productSeries)
+    const [mainImage, setMainImage] = useState("") 
+    
 
-    // console.log("product: ", product);
     const compareByName = (a, b) => {
         if (a.name === "Default")
             return -1; // Đặt "Default" đầu tiên
@@ -65,59 +66,61 @@ export default function ProductDetail() {
     useEffect(() => {
         window.scrollTo(0, 0)
         const data = { productId: param.productId }
-        console.log("productId", data);
         dispatch(findProductsById(data))
     }, [param.productId, dispatch])
 
 
     useEffect(() => {
-        const data = {
-            id: param.productId,
-            series: series
+        switch (product?.category?.name) {
+            case 'skin':
+                if (product?.skin?.series && product?.skin?.series !== checkRef.current) {
+                    const skin = {
+                        id: param.productId,
+                        series: product?.skin?.series
+                    }
+                    dispatch(findSkinProductsBySeries(skin))
+                    checkRef.current = product?.skin?.series
+                }
+                break
+            case 'champion':
+                if (product?.champion?.region && product?.champion?.region !== checkRef.current) {
+                    const champion = {
+                        id: param.productId,
+                        region: product?.champion?.region
+                    }
+                    dispatch(findChampionProductsByRegion(champion))
+                    checkRef.current = product?.skin?.region
+                }
+            case 'chibi':
+                if (product?.chibi?.champion && product?.chibi?.champion !== checkRef.current) {
+                    const chibi = {
+                        id: param.productId,
+                        champion: product?.chibi?.champion
+                    }
+                    dispatch(findChibiProductsByChampion(chibi))
+                    checkRef.current = product?.chibi?.champion
+                }
+            default:
+                break;
         }
-        dispatch(findProductsBySeries(data))
-    }, [param.productId, series, dispatch])
+    }, [param.productId, series, product, dispatch])
 
     const handleColor = (e) => {
         setSelectedColor(e)
     }
 
-    const renderWithColor = (size) => (
-        <>
-            <div className='flex justify-center mb-5 -mt-9'>
-                {size.name !== "Default" && (
-                    <div
-                        style={{ backgroundColor: `${size.color}` }}
-                        className='w-6 h-6 rounded-xl border-2 border-gray-800'
-                    />
-                )}
-            </div>
-            <img
-                className='cursor-pointer'
-                src={size.image}
-                alt="" />
-            <p className={`text-gray-300 justify-center flex ${size.name === "Default" && 'mt-9'}`}>
-                {size.name}
-            </p>
-        </>
-    );
-
-    const renderWithoutColor = (size) => (
-        <>
-            <img
-                className='cursor-pointer'
-                src={size.image}
-                alt=""
-            />
-            <p className='text-gray-300 justify-center flex mt-5'>{size.name}</p>
-        </>
-    );
 
     const handleYoutube = (e) => {
         e.preventDefault();
         setShowYoutube(!showYoutube);
     }
 
+    useEffect(() => {
+        if (product?.imageUpload?.url) {
+            console.log("start add image: ", product?.imageUpload?.url);
+            setMainImage(product?.imageUpload?.url)
+        }
+    }, [product])
 
     return (
         <div className="bg-[#111827] text-white pb-20">
@@ -152,11 +155,12 @@ export default function ProductDetail() {
                                     className="h-[100rem] w-full"
                                 />
                             ) : (
-                                <img
-                                    src={product?.imageUpload?.url}
-                                    alt=""
-                                    className="h-full w-full object-contain"
-                                />
+                                <div className='flex justify-center bg-white/10'>
+                                    <img
+                                        src={mainImage}
+                                        alt=""
+                                    />
+                                </div>
                             )}
                         </div>
 
@@ -266,19 +270,6 @@ export default function ProductDetail() {
                         <Grid container spacing={2} className='pt-5'>
                             <Grid item xs={4}>
                                 <h1 className='text-lg lg:text-xl text-gray-300'>
-                                    Series :
-                                </h1>
-                            </Grid>
-                            <Grid item xs={8} className='flex items-center'>
-                                <h1 className='font-bold text-lg lg:text-xl text-gray-100'>
-                                    {product?.skin?.series}
-                                </h1>
-                            </Grid>
-                        </Grid>
-
-                        <Grid container spacing={2} className='pt-5'>
-                            <Grid item xs={4}>
-                                <h1 className='text-lg lg:text-xl text-gray-300'>
                                     Release Date :
                                 </h1>
                             </Grid>
@@ -330,35 +321,48 @@ export default function ProductDetail() {
 
                         {product?.category.name === "champion" && <ProductSkill skill={product?.champion.skill} />}
 
-                        {/* Information */}
+                        {/* Color */}
                         <div className="mt-4 lg:row-span-3 lg:mt-0">
                             <form className="mt-10">
-                                {/* Colors */}
                                 <div className="mt-10 mb-10">
                                     <RadioGroup value={selectedColor} onChange={handleColor} className="mt-4">
                                         <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                                            {product?.color.sort(compareByName).map((color) => (
-
+                                            {product?.color.sort(compareByName).map((item) => (
                                                 <RadioGroup.Option
-                                                    key={color.name}
-                                                    value={color}
-                                                    disabled={!color.inStock}
+                                                    key={item.name}
+                                                    value={item}
+                                                    disabled={!item.inStock}
                                                     className={({ active }) =>
                                                         classNames(
-                                                            color.inStock
+                                                            item.inStock
                                                                 ? 'cursor-pointer text-gray-900 shadow-sm'
                                                                 : 'cursor-not-allowed text-gray-200',
                                                             active ? 'ring-2 ring-indigo-500' : '',
                                                             'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-white/10 focus:outline-none sm:flex-1 sm:py-6'
                                                         )
                                                     }
+                                                    onClick={() => setMainImage(item.name === "Default" ? product?.imageUpload?.url : item.image)}
                                                 >
                                                     {({ active, checked }) => (
                                                         <>
-                                                            <RadioGroup.Label as="span">
-                                                                {color.color != null ? renderWithColor(color) : renderWithoutColor(color)}
+                                                            <RadioGroup.Label>
+                                                                <div className='flex justify-center mb-5 -mt-9'>
+                                                                    {item.name !== "Default" && (
+                                                                        <div
+                                                                            style={{ backgroundColor: `${item.color}` }}
+                                                                            className='w-6 h-6 rounded-xl border-2 border-gray-800'
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                                <img
+                                                                    className='cursor-pointer'
+                                                                    src={item.image}
+                                                                    alt="" />
+                                                                <p className={`text-gray-300 justify-center flex ${item.name === "Default" && 'mt-9'}`}>
+                                                                    {item.name}
+                                                                </p>
                                                             </RadioGroup.Label>
-                                                            {color.inStock ? (
+                                                            {item.inStock ? (
                                                                 <span
                                                                     className={classNames(
                                                                         active ? 'border' : 'border-2',
@@ -434,6 +438,7 @@ export default function ProductDetail() {
                                 </div>
                             </Grid>
 
+                            {/* Rating */}
                             <Grid item xs={5}>
                                 <h1 className='text-xl font-semibold pb-2'>Product Ratings</h1>
 
@@ -542,14 +547,15 @@ export default function ProductDetail() {
 
                 {/* similer products */}
                 <section className='pt-10'>
-                    <h1 className='pt-5 text-xl font-bold pl-20'>Similer Products</h1>
+                    <h1 className='pt-5 text-2xl font-bold pl-20'>Similer Products</h1>
 
-                    <div className='flex flex-wrap justify-center'>
-                        {console.log("productSeries: ", productSeries)}
+                    <Grid container spacing={2}>
                         {productSeries.map((item) => (
-                            <ProductSeries product={item} key={item.id} />
+                            <Grid item xs={2} key={item.id} marginTop={3}>
+                                <ProductCard product={item} />
+                            </Grid>
                         ))}
-                    </div>
+                    </Grid>
                 </section>
 
             </div>
