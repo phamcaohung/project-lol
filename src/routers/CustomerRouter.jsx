@@ -11,6 +11,7 @@ import Order from "../components/order/Order";
 import PaymentSuccess from "../components/payment/PaymentSuccess";
 import SigninAndSignup from "../auth/SigninAndSignup";
 
+
 const CustomerRouter = () => {
 
     const location = useLocation()
@@ -39,7 +40,11 @@ const CustomerRouter = () => {
                         <Route path="/category/:category" element={<Product />}></Route>
                         <Route path="/product/:productId" element={<ProductDetail />}></Route>
                         <Route path="/checkout" element={<Checkout />}></Route>
-                        <Route path="/account/order" element={<Order />}></Route>
+                        <Route path="/order/:orderId/:step" element={<Checkout />}></Route>
+                        <Route path="/account/orders" element={<Order />}></Route>
+                        <Route path="/account/favorite" element={<Order />}></Route>
+                        <Route path="/account/information" element={<Order />}></Route>
+                        <Route path="/account/password" element={<Order />}></Route>
                         <Route path="/payment/:orderId" element={<PaymentSuccess />}></Route>
                     </Routes>
                     <div className="bg-[#EDF1FF]">

@@ -1,10 +1,12 @@
 import { Listbox, Transition } from "@headlessui/react";
-import { Autocomplete, FormControl, styled, TextField } from "@mui/material";
+import { Autocomplete, Chip, FormControl, Step, StepLabel, Stepper, styled, TextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
 import { Fragment } from "react";
 import UnfoldMoreIcon from '@mui/icons-material/UnfoldMore';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
+import { statusColor } from './FilterData.js'
+
 
 
 export const CustomTextField = styled(TextField)({
@@ -65,6 +67,75 @@ export const CustomDatePicker = styled(DatePicker)({
         color: "white"
     }
 })
+
+export const CustomStepper = ({
+    steps,
+    active
+}) => {
+    return (
+        <Stepper activeStep={active}>
+            {steps.map((label) => {
+                return (
+                    <Step key={label}
+                        sx={{
+                            ".MuiStepLabel-label": {
+                                color: "gray",
+                                fontWeight: "semibold",
+                                fontSize: "1.25rem",
+                                "&.Mui-completed": {
+                                    color: "#8DDC26"
+                                },
+                                "&.Mui-active": {
+                                    color: "#2DCCFF"
+                                }
+                            },
+                            ".MuiSvgIcon-root": {
+                                color: "gray",
+                                width: "35px",
+                                height: "35px",
+                                "&.Mui-completed": {
+                                    color: "#8DDC26"
+                                },
+                                "&.Mui-active": {
+                                    color: "#2DCCFF",
+                                    ".MuiStepIcon-text": {
+                                        fill: "black"
+                                    }
+                                },
+                            },
+                        }}
+                    >
+                        <StepLabel>
+                            {label}
+                        </StepLabel>
+                    </Step>
+                );
+            })}
+        </Stepper>
+    )
+}
+
+export const CustomChip = ({
+    bgColor,
+    label,
+    className
+}) => {
+    bgColor = statusColor.find(item => item.name === label)?.value
+    return (
+        <Chip
+            className={className}
+            label={label}
+            sx={{
+                backgroundColor: `${bgColor}`,
+                color: `#111827`,
+                borderRadius: '10px',
+                padding: '8px 16px',
+                fontSize: '1rem',
+                fontWeight: "bold"
+            }}
+        />
+    )
+}
 
 export const CustomListBox = ({
     value,
@@ -194,5 +265,16 @@ export const CustomListBox = ({
                 </>
             )}
         </Listbox>
+    )
+}
+
+export const CustomPopUp = ({
+    title,
+    open
+}) => {  
+    return (
+        <>
+            
+        </>
     )
 }

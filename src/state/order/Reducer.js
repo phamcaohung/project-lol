@@ -1,30 +1,31 @@
-import { CREATE_ORDER_FAILURE, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, DELETE_ADDRESS_BY_ID_FAILURE, DELETE_ADDRESS_BY_ID_REQUEST, DELETE_ADDRESS_BY_ID_SUCCESS, GET_ADDRESS_BY_USER_FAILURE, GET_ADDRESS_BY_USER_REQUEST, GET_ADDRESS_BY_USER_SUCCESS, GET_ORDER_BY_ID_FAILURE, GET_ORDER_BY_ID_REQUEST, GET_ORDER_BY_ID_SUCCESS, GET_ORDER_HISTORY_FAILURE, GET_ORDER_HISTORY_REQUEST, GET_ORDER_HISTORY_SUCCESS } from "./ActionType";
+import { CREATE_ORDER_FAILURE, CREATE_ORDER_REQUEST, CREATE_ORDER_SUCCESS, DELETE_ADDRESS_BY_ID_FAILURE, DELETE_ADDRESS_BY_ID_REQUEST, DELETE_ADDRESS_BY_ID_SUCCESS, GET_ADDRESS_BY_ID_FAILURE, GET_ADDRESS_BY_ID_REQUEST, GET_ADDRESS_BY_ID_SUCCESS, GET_ADDRESS_BY_USER_FAILURE, GET_ADDRESS_BY_USER_REQUEST, GET_ADDRESS_BY_USER_SUCCESS, GET_ORDER_BY_PUBLIC_ID_FAILURE, GET_ORDER_BY_PUBLIC_ID_REQUEST, GET_ORDER_BY_PUBLIC_ID_SUCCESS, GET_ORDER_HISTORY_FAILURE, GET_ORDER_HISTORY_REQUEST, GET_ORDER_HISTORY_SUCCESS } from "./ActionType";
 
 const initialState = {
     order: null,
     orderHistory: null,
     error: null,
     loading: false,
+    listAddress: null,
+    deletedAddress: null,
     address: null,
-    deletedAddress: null
 }
 
 export const orderReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_ORDER_BY_ID_REQUEST: 
+        case GET_ORDER_BY_PUBLIC_ID_REQUEST: 
             return {
                 ...state,
                 loading: true,
                 error: null
             }
-        case GET_ORDER_BY_ID_SUCCESS:
+        case GET_ORDER_BY_PUBLIC_ID_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 error: null,
                 order: action.payload
             }
-        case GET_ORDER_BY_ID_FAILURE:
+        case GET_ORDER_BY_PUBLIC_ID_FAILURE:
             return {
                 ...state,
                 loading: false,
@@ -98,6 +99,24 @@ export const deleteAddressReducer = (state = initialState, action) => {
     }
 }
 
+export const GetAddressByIdReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case GET_ADDRESS_BY_ID_REQUEST:
+            return {...state, loading: true, error: null}
+        case GET_ADDRESS_BY_ID_SUCCESS:
+            return {
+                    ...state, 
+                    loading: false, 
+                    error: null, 
+                    address: action.payload
+                }
+        case GET_ADDRESS_BY_ID_FAILURE:
+            return {...state, loading: false, error: action.payload}
+        default:
+            return state;
+    }
+}
+
 export const getAddressReducer = (state = initialState, action) => {
     switch (action.type) {
         case GET_ADDRESS_BY_USER_REQUEST:
@@ -107,7 +126,7 @@ export const getAddressReducer = (state = initialState, action) => {
                     ...state, 
                     loading: false, 
                     error: null, 
-                    address: action.payload
+                    listAddress: action.payload
                 }
         case GET_ADDRESS_BY_USER_FAILURE:
             return {...state, loading: false, error: action.payload}

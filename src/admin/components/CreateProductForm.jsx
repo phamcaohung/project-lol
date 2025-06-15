@@ -267,10 +267,10 @@ const CreateProductForm = () => {
         formData.append('imageFile', imageFile)
 
 
-        // param.productId
-        //     ? dispatch(updateProduct(param.productId, formData))
-        //     : dispatch(createProduct(formData))
-        // console.log(updateProductData);
+        param.productId
+            ? dispatch(updateProduct(param.productId, formData))
+            : dispatch(createProduct(formData))
+
 
         param.productId
             ? console.log("productDataUpdate: ", updateProductData)
@@ -351,7 +351,15 @@ const CreateProductForm = () => {
                             variant="contained"
                             onChange={handleFileChange}
                             startIcon={<CloudUploadIcon />}
-                            color="error"
+                            sx={{
+                                bgcolor: "#2DCCFF",
+                                color: "black",
+                                fontWeight: "bold",
+                                fontSize: "1rem",
+                                ":hover": {
+                                    bgcolor: "#56F000"
+                                }
+                            }}
                         >
                             Upload Image file
                             <VisuallyHiddenInput type="file" />
@@ -575,8 +583,17 @@ const CreateProductForm = () => {
                     <Grid item xs={12} className="flex justify-center">
                         <Button
                             variant="contained"
-                            sx={{ p: 1.8 }}
-                            className="py-20"
+                            sx={{ 
+                                p: "1rem",
+                                borderRadius: "30px",
+                                color: "black",
+                                fontWeight: "bold",
+                                ":hover": {
+                                    bgcolor: "#56F000",
+                                    color: "black",
+                                    fontWeight: "bold"
+                                }
+                            }}
                             size="medium"
                             color="secondary"
                             onClick={handleAddNewColor}
@@ -587,12 +604,21 @@ const CreateProductForm = () => {
 
                     <Grid item xs={12} className="flex justify-center">
                         <Button
-                            variant="contained"
-                            sx={{ p: 2, marginTop: "20px" }}
-                            className="py-20 w-[30rem]"
+                            sx={{ 
+                                py: "1.2rem",
+                                px:  "2.7rem",
+                                marginTop: "20px",
+                                bgcolor: "#2DCCFF",
+                                color: "black",
+                                fontWeight: "bold",
+                                borderRadius: "30px",
+                                fontSize: "1.2rem",
+                                ":hover": {
+                                    bgcolor: "#56F000",
+                                }
+                            }}
                             size="large"
                             type="submit"
-                            color="error"
                         >
                             {param.productId ? `Update Product Id ${param.productId}` : `Add New Product`}
                         </Button>

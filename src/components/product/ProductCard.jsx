@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 import InvertColorsOffIcon from '@mui/icons-material/InvertColorsOff';
@@ -6,22 +6,21 @@ import InvertColorsOffIcon from '@mui/icons-material/InvertColorsOff';
 
 const ProductCard = ({ product }) => {
     const navigate = useNavigate()
-    const [isHovered, setIsHovered] = useState(false);
 
     return (
         <div
-            className="cursor-pointer flex flex-col items-center rounded-lg shadow-lg overflow-hidden 
-                            w-[18rem] h-full mx-3 border pt-10 mt-10 hover:bg-white/10"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            className="cursor-pointer items-center rounded-lg shadow-lg overflow-hidden 
+                        h-full border pt-10 mt-10 hover:bg-white/10"
             onClick={() => navigate(`/product/${product.id}`, { state: product.series })}
         >
 
             <img
-                className='h-[13.5rem] w-full object-cover object-center'
+                className='h-64 w-full object-cover hover:scale-90 transition duration-300 ease-in-out'
                 alt=""
-                src={isHovered ? product.imageColor : product.imageUrl}
+                src={product.imageUrl}
             />
+
+            <hr className="bg-slate-400 w-full"/>
 
             {product.imageTier &&
                 <div className="flex justify-center">
@@ -54,16 +53,16 @@ const ProductCard = ({ product }) => {
                     {product?.colors.length === 0 ? (
                         <InvertColorsOffIcon color="error" fontSize="large"/>
                     ) : (
-                        product?.colors.map((color) => (
+                        product?.colors.map((item) => (
                             <div
-                                key={color}
-                                style={{ backgroundColor: `${color}` }}
+                                key={item}
+                                style={{ backgroundColor: `${item}` }}
                                 className='w-6 h-6 rounded-xl border-2 border-gray-800 m-2'
                             />
                         ))
                     )}
                 </div>
-                <h1 className="font-bold text-lg text-gray-100 flex justify-center">
+                <h1 className="font-bold text-lg text-gray-100 flex justify-center pt-5">
                     Release: {moment(product?.releaseDate).format("MMMM DD, YYYY")}
                 </h1>
             </div>

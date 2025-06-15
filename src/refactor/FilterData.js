@@ -270,3 +270,35 @@ export const initialSort = [
         value: "releaseDate_high"
     },
 ]
+
+export const statusColor = [
+    {
+        name: "CANCEL",
+        value: "#FF3838"
+    },
+    {
+        name: "PENDING",
+        value: "#FCE83A"
+    },
+    {
+        name: "BLOCK",
+        value: "#A4ABB6"
+    },
+    {
+        name: "ACTIVE",
+        value: "#56F000"
+    },
+    {
+        name: "COMPLETED",
+        value: "#56F000"
+    },
+    {
+        name: "PLACED",
+        value: "#56F000"
+    },
+    {
+        name: "VALID",
+        value: "#2DCCFF"
+    }
+]
+

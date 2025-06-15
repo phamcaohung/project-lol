@@ -8,12 +8,13 @@ import { getUser, logout } from '../../state/auth/Action'
 import { Avatar } from '@mui/material'
 import { deepPurple } from '@mui/material/colors'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { Button } from 'bootstrap'
 
 
 
 const userNavigation = [
   { name: 'Profile' },
-  { name: 'My Order' },
+  { name: 'My Orders' },
   { name: 'Sign Out' },
 ]
 
@@ -29,14 +30,12 @@ export default function Navigation() {
 
   const handleAction = (action) => {
     switch (action) {
-      case 'My Order':
-        navigate("/account/order")
+      case 'My Orders':
+        navigate(`/account/orders`, { state: "Order History" })
         break
       case 'Sign Out':
         console.log("start");
         dispatch(logout(navigate))
-        break
-      default:
         break
     }
   }
@@ -119,16 +118,15 @@ export default function Navigation() {
                           {userNavigation.map((item) => (
                             <Menu.Item key={item.name}>
                               {({ active }) => (
-                                <Link
-                                  href=''
+                                <div
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',
-                                    'block px-4 py-2 text-xl text-gray-700'
+                                    'block px-4 py-2 text-xl text-gray-700 cursor-pointer'
                                   )}
                                   onClick={() => handleAction(item.name)}
                                 >
                                   {item.name}
-                                </Link>
+                                </div>
                               )}
                             </Menu.Item>
                           ))}

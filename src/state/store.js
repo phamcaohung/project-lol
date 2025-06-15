@@ -3,9 +3,10 @@ import thunk from "redux-thunk";
 import { authReducer } from "./auth/Reducer";
 import { carouselProductSeriesReducer, deleteProductReducer, getAllSeriesSkinReducer, getNewProductReducer, productListReducer, productReducer, productSeriesReducer } from "./product/Reducer";
 import { getCartReducer, deleteCartReducer } from "./cart/Reducer";
-import { createOrderReducer, deleteAddressReducer, getAddressReducer, getOrderHistoryReducer, orderReducer } from "./order/Reducer";
+import { createOrderReducer, deleteAddressReducer, GetAddressByIdReducer, getAddressReducer, getOrderHistoryReducer, orderReducer } from "./order/Reducer";
 import { OrderStatusDeleteReducer, adminOrderReducer, changeOrderStatusReducer } from "./admin/order/Reducer";
 import { updateCartItem } from "./cart/Action";
+import { createUserAddressReducer } from "./user/Reducer";
 
 //sb-ixzhe29386147@personal.example.com
 
@@ -25,10 +26,12 @@ const rootReducers = combineReducers({
     status: changeOrderStatusReducer,
     productSeries: productSeriesReducer,
     productCarousel: carouselProductSeriesReducer,
-    address: getAddressReducer,
+    listAddress: getAddressReducer,
     deletedAddress: deleteAddressReducer,
     series: getAllSeriesSkinReducer,
     newProducts: getNewProductReducer,
+    address: GetAddressByIdReducer,
+    response: createUserAddressReducer
 })
 
 export const store = legacy_createStore(rootReducers, applyMiddleware(thunk))

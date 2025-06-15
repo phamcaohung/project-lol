@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MainCarousel from "../carousel/MainCarousel";
 import { Button, Grid } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
@@ -12,11 +12,14 @@ import { useNavigate } from "react-router-dom";
 import PageNewProduct from "./PageNewProduct";
 
 
+
 const HomePage = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const { productCarousel } = useSelector(store => store.productCarousel)
     const [series, setSeries] = useState("PROJECT")
+    const ref = useRef();
+    const [isVisible, setIsVisible] = useState(false);
 
 
     const handleChangeName = (name) => {
@@ -28,6 +31,22 @@ const HomePage = () => {
     useEffect(() => {
         dispatch(findCarouselProductsBySeries(series))
     }, [dispatch, series])
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+          setIsVisible(entry.isIntersecting);
+        }, { threshold: 0.3 });
+    
+        if (ref.current) {
+          observer.observe(ref.current);
+        }
+    
+        return () => {
+          if (ref.current) {
+            observer.unobserve(ref.current);
+          }
+        };
+      }, []);
 
 
     const iconStyle = {
@@ -121,7 +140,12 @@ const HomePage = () => {
                     marginTop={5}
                     spacing={5}
                 >
-                    <Grid item xs={6} >
+                    <Grid 
+                        item xs={6} 
+                        ref={ref}
+                        className={`transition-all duration-700 transform 
+                        ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-96 opacity-0'}`}
+                    >
                         <div className="flex justify-between bg-white/10 p-10">
                             <img
                                 src="https://static.wikia.nocookie.net/leagueoflegends/images/5/5a/Chibi_Kai%27Sa_Lagoon_Dragon_Tier_1.png"
@@ -157,7 +181,11 @@ const HomePage = () => {
                         </div>
                     </Grid>
 
-                    <Grid item xs={6} >
+                    <Grid 
+                        item xs={6} 
+                        className={`transition-all duration-700 transform 
+                        ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-96 opacity-0'}`}
+                    >
                         <div className="flex justify-between bg-white/10 p-10">
                             <div>
                                 <h3 className="text-red-400 text-2xl">

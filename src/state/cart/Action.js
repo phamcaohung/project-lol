@@ -22,7 +22,11 @@ export const addItemToCart = (reqData) => async (dispatch) => {
     dispatch({ type: ADD_ITEM_TO_CART_REQUEST })
 
     try {
-        const { data } = await api.put("api/cart/add", reqData)
+        const { data } = await api.put("api/cart/add", reqData , {
+            headers: {
+                "Content-Type" : "application/json",
+            },
+        })
         reqData.navigate("/cart")
         
         dispatch({ 
@@ -58,7 +62,7 @@ export const updateCartItem = (reqData) => async (dispatch) => {
     dispatch({ type: UPDATE_CART_ITEM_REQUEST })
 
     try {
-        const { data } = await api.put(`api/cart_item/${reqData.cartItemId}`, reqData.data)
+        const { data } = await api.put(`api/cart_item/${reqData.cartItemId}`, reqData.quantity)
         dispatch({ 
             type : UPDATE_CART_ITEM_SUCCESS, 
             payload: data

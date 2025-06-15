@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Fragment } from "react";
-import { Table, Skeleton, TableContainer, Pagination, TextField, TableHead, TableRow, TableCell, TableBody, Paper, Button, CardHeader, Grid, FormControl, InputLabel, Select, MenuItem, ThemeProvider, createTheme } from "@mui/material"
+import { Table, Skeleton, Pagination, TableHead, TableRow, TableCell, TableBody, Button, CardHeader, Grid, InputLabel, Select, MenuItem, createTheme } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, findProducts, getAllSeriesSkin } from '../../state/product/Action'
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -354,7 +354,7 @@ const ProductsTable = () => {
                                     {!loading ? (
                                         <>
                                             <img
-                                                src={items.imageColor}
+                                                src={items.imageUrl}
                                                 className="w-full h-full"
                                                 alt=""
                                             />
@@ -446,7 +446,16 @@ const ProductsTable = () => {
                                         ? <Button
                                             variant="contained"
                                             onClick={() => navigate(`/admin/product/edit/${items.id}`)}
-                                            color="secondary"
+                                            sx={{
+                                                bgcolor: "#2DCCFF",
+                                                color: "black",
+                                                borderRadius: "30px",
+                                                fontSize: "1rem",
+                                                fontWeight: "bold",
+                                                ":hover": {
+                                                    bgcolor: "#56F000"
+                                                }
+                                            }}
                                             startIcon={<EditIcon />}
                                         >
                                             Edit
@@ -460,7 +469,16 @@ const ProductsTable = () => {
                                         ? <Button
                                             variant="contained"
                                             onClick={() => handleDeleteProduct(items.id)}
-                                            color="error"
+                                            sx={{
+                                                bgcolor: "#FF3838",
+                                                color: "black",
+                                                borderRadius: "30px",
+                                                fontSize: "1rem",
+                                                fontWeight: "bold",
+                                                ":hover": {
+                                                    bgcolor: "#56F000"
+                                                }
+                                            }}
                                             startIcon={<DeleteIcon />}
                                         >
                                             Delete

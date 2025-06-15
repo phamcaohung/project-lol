@@ -40,12 +40,22 @@ const PageNewProduct = ({ category }) => {
                             <div className="flex justify-center">
                                 <img
                                     className="hover:scale-90 transition duration-300 ease-in-out"
-                                    src={item.imageColor}
+                                    src={item.imageUrl}
                                     alt=""
                                 />
                             </div>
 
                             <hr className="bg-slate-400 w-full"/>
+
+                            {item.imageTier &&
+                                <div className="flex justify-center">
+                                    <img
+                                        className="h-8 w-8 -mt-4"
+                                        src={item.imageTier}
+                                        alt=""
+                                    />
+                                </div>
+                            }
 
                             <div className="h-24 flex justify-center">
                                 <h2 className="text-xl text-red-400 font-semibold my-auto tracking-wider">

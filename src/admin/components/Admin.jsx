@@ -11,11 +11,11 @@ import AdminDashboard from "./Dashboard";
 
 
 const menu = [
-    { name: "Dashboard", path: "/admin", icon: <DashboardIcon color="error" fontSize="large"/>},
-    { name: "Products", path: "/admin/products", icon: <DashboardIcon color="error" fontSize="large"/>},
-    { name: "Customers", path: "/admin/customers", icon: <DashboardIcon color="error" fontSize="large"/>},
-    { name: "Orders", path: "/admin/orders", icon: <DashboardIcon color="error" fontSize="large"/>},
-    { name: "Create Product", path: "/admin/product/create", icon: <DashboardIcon color="error" fontSize="large"/>},
+    { name: "Dashboard", path: "/admin", icon: <DashboardIcon sx={{ color: "#56F000" }} fontSize="large"/>},
+    { name: "Products", path: "/admin/products", icon: <DashboardIcon sx={{ color: "#56F000" }} fontSize="large"/>},
+    { name: "Customers", path: "/admin/customers", icon: <DashboardIcon sx={{ color: "#56F000" }} fontSize="large"/>},
+    { name: "Orders", path: "/admin/orders", icon: <DashboardIcon sx={{ color: "#56F000" }} fontSize="large"/>},
+    { name: "Create Product", path: "/admin/product/create", icon: <DashboardIcon sx={{ color: "#56F000" }} fontSize="large"/>},
 ]
 
 const Admin = () => {
@@ -38,7 +38,7 @@ const Admin = () => {
                             key={item.name}
                             disablePadding
                             onClick={() => navigate(item.path)} 
-                            className="text-white hover:bg-black"
+                            className="text-white hover:bg-[black]"
                         >
                             <ListItemButton>
                                 <ListItemIcon>
@@ -58,7 +58,7 @@ const Admin = () => {
                 <ListItem disablePadding className="text-white">
                     <ListItemButton>
                         <ListItemIcon>
-                            <AccountCircleIcon color="error" fontSize="large"/>
+                            <AccountCircleIcon sx={{ color: "#56F000" }} fontSize="large"/>
                             
                         </ListItemIcon>
                         <ListItemText>Account</ListItemText>

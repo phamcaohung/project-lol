@@ -1,4 +1,5 @@
-//Reducer.js
+import { CREATE_USER_ADDRESS_FAILURE, CREATE_USER_ADDRESS_REQUEST, CREATE_USER_ADDRESS_SUCCESS, EDIT_USER_ADDRESS_FAILURE, EDIT_USER_ADDRESS_REQUEST, EDIT_USER_ADDRESS_SUCCESS, RESET_RESPONSE } from "./ActionType";
+
 const initialState = {
     response: null,
     error: null,
@@ -29,18 +30,16 @@ export const createUserAddressReducer = (state = initialState, action) => {
                 loading: false,
                 error: action.payload
             }
+        case RESET_RESPONSE:
+            return {
+                ...state,
+                loading: true,
+                response: null,
+                error: null
+            }
         default:
             return state;
     }
 }
-
-//store.js
-const rootReducers = combineReducers({
-    response: createUserAddressReducer
-})
-
-export const store = legacy_createStore(rootReducers, applyMiddleware(thunk))
-
-
 
 

@@ -1,97 +1,120 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import { Button, Grid } from "@mui/material";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import moment from "moment/moment";
 import OrderCardItem from "./OrderCardItem";
+import { CustomChip } from "../../refactor/CustomStyle";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+
 
 const OrderCard = ({ order }) => {
-    const navigate = useNavigate()
 
-    // console.log(order);
+    const navigate = useNavigate()
+    const [show, setShow] = useState(true)
 
     return (
-        <div 
-            onClick={() => navigate(`/account/order/${order.id}`)} 
-            className="py-5 border border-gray-600 mt-10"
-        >
-            <Grid container spacing={1}>
-                <Grid 
-                    item xs={4} 
-                    className="text-white font-semibold text-2xl"
-                >
-                    <div className="p-10">
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                Order At:
-                            </span>
-                            {moment(order.createAt).format("MMMM DD, YYYY")}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                Order Status: 
-                            </span>
-                            {order.orderStatus}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                Name: 
-                            </span>
-                            {order.shippingAddress.lastName + " " + order.shippingAddress.firstName}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                Street Address:
-                            </span>
-                            {order.shippingAddress.streetAddress}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                City:
-                            </span>
-                            {order.shippingAddress.city}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                State:
-                            </span>
-                            {order.shippingAddress.state}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                Zip Code:
-                            </span>
-                            {order.shippingAddress.zipCode}
-                        </p>
-                        <p className="mt-2">
-                            <span className="text-gray-400 pr-5">
-                                Total Item:
-                            </span>
-                            {order.totalItem}
-                        </p>
-                        <div className="flex items-center mt-2">
-                            <p className="mt-2">
-                                <span className="text-gray-400 pr-5">
-                                    Total Price:
-                                </span>
-                                {order.totalPrice}
-                            </p>
-                            <img 
-                                className='w-[2rem] h-[2rem] ml-2 mt-3'
-                                src="https://rankedkings.com/img/rp.png"
-                                alt="" 
-                            />
-                        </div>
+        <div className="border border-gray-600 rounded-xl">
+            <div className="p-10 bg-gray-800">
+                <div className="flex justify-between">
+                    <div className="flex items-center pb-5">
+                        <h3 className="text-xl text-white/70 font-semibold">Order #:</h3>
+                        <h3 className="text-2xl pl-5">
+                            {order?.id}
+                        </h3>
                     </div>
-                </Grid>
+                    <div className="mb-5 cursor-pointer" onClick={() => setShow(!show)}>
+                        {show ? (
+                            <ExpandMoreIcon
+                                sx={{
+                                    color: "#56F000",
+                                    fontSize: "70px",
+                                }}
+                            />
+                        ) : (
+                            <ExpandLessIcon
+                                sx={{
+                                    color: "#56F000",
+                                    fontSize: "70px",
+                                }}
+                            />
+                        )}
+                    </div>
 
-                <Grid container item xs={8} className="overflow-y-auto max-h-[29rem]">
-                    {order?.orderItem.map((item) => 
-                        <Grid item xs={4} marginTop={5}>
-                            <OrderCardItem item={item} key={item.id} />
-                        </Grid>
-                    )}
+                </div>
+
+                <Grid container>
+                    <Grid item xs={2}>
+                        <h3 className="text-xl text-white/70 font-semibold">Order Date</h3>
+                        <h3 className="text-2xl mt-2">
+                            {moment(order?.orderDate).format("MMMM DD, YYYY")}
+                        </h3>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <h3 className="text-xl text-white/70 font-semibold">Status</h3>
+                        <CustomChip label={order?.orderStatus} className="mt-2" />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <h3 className="text-xl text-white/70 font-semibold">Total Price</h3>
+                        <h3 className="text-2xl mt-2 flex items-center">
+                            {order?.totalPrice}
+                            <img
+                                className="w-[1.5rem] h-[1.5rem] ml-2 mt-1"
+                                src="https://rankedkings.com/img/rp.png"
+                                alt=""
+                            />
+                        </h3>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <h3 className="text-xl text-white/70 font-semibold">Total Item</h3>
+                        <h3 className="text-2xl mt-2 flex items-center">
+                            {order?.totalItem}
+                        </h3>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <div className="flex justify-between">
+                            <Button
+                                sx={{
+                                    px: "2.5rem",
+                                    py: "0.5rem",
+                                    bgcolor: "#2DCCFF",
+                                    color: "black",
+                                    fontWeight: "bold",
+                                    fontSize: '1rem',
+                                    borderRadius: "40px",
+                                    ":hover": {
+                                        bgcolor: "#56F000",
+                                    }
+                                }}
+                            >
+                                Order Again
+                            </Button>
+
+                            <Button
+                                sx={{
+                                    px: "2.5rem",
+                                    py: "0.5rem",
+                                    border: '1px solid gray',
+                                    color: "white",
+                                    fontWeight: "bold",
+                                    fontSize: '1rem',
+                                    borderRadius: "40px",
+                                    ":hover": {
+                                        bgcolor: "#56F000",
+                                        color: "black",
+                                        fontWeight: "bold",
+                                    },
+                                }}
+                                onClick={() => navigate(`/order/${order?.id}/4`)}
+                            >
+                                View Order
+                            </Button>
+                        </div>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </div>
+
+            {order?.orderItem?.map((item) => <OrderCardItem item={item} key={item.id} show={show} />)}
         </div>
     )
 }
